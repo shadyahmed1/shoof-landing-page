@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHOOF — شوف واكسب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Outfit:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════
+   TOKENS
+══════════════════════════════════════ */
+:root {
+  --orange:        #FF5A3C;
+  --orange2:       #ff7a5c;
+  --orange-light:  #fff0ed;
+  --orange-mid:    #ffd5cb;
+  --white:         #ffffff;
+  --off:           #fafafa;
+  --dark:          #0f0f0f;
+  --gray:          #6b7280;
+  --gray-light:    #f3f4f6;
+  --border:        #e5e7eb;
+
+  /* ── Arabic fonts ── */
+  --font-ar-head:  'Tajawal', sans-serif;          /* big headings */
+  --font-ar-body:  'IBM Plex Sans Arabic', sans-serif; /* body / small text */
+
+  /* ── English fonts ── */
+  --font-en-head:  'Outfit', sans-serif;
+  --font-en-body:  'Inter', sans-serif;
+
+  /* defaults (Arabic mode) */
+  --font-head: var(--font-ar-head);
+  --font-body: var(--font-ar-body);
+}
+
+/* ── When English is active ── */
+[lang="en"] {
+  --font-head: var(--font-en-head);
+  --font-body: var(--font-en-body);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--white);
+  color: var(--dark);
+  overflow-x: hidden;
+  transition: font-family .2s;
+}
+
+/* ══ CONTENT VISIBILITY ══ */
+.ar-only { display: block; }
+.en-only { display: none; }
+[lang="en"] .ar-only { display: none; }
+[lang="en"] .en-only { display: block; }
+
+/* inline spans */
+span.ar-only { display: inline; }
+span.en-only { display: none; }
+[lang="en"] span.ar-only { display: none; }
+[lang="en"] span.en-only { display: inline; }
+
+/* ══ TYPOGRAPHY HELPERS ══ */
+.h-display {
+  font-family: var(--font-head);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+}
+[lang="en"] .h-display { letter-spacing: -1.5px; }
+
+.body-text { font-family: var(--font-body); }
+
+/* ══════════════════════════════════════
+   UTILITY
+══════════════════════════════════════ */
+.container { max-width:1200px; margin:0 auto; padding:0 48px; }
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: .72rem; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 18px;
+}
+
+.accent { color: var(--orange); }
+
+.sub {
+  font-family: var(--font-body);
+  color: var(--gray); font-size: .98rem;
+  line-height: 1.85; margin-top: 14px; max-width: 560px;
+}
+
+/* ══════════════════════════════════════
+   NAV
+══════════════════════════════════════ */
+nav {
+  position: fixed; top:0; width:100%; z-index:999;
+  padding: 0 48px; height: 68px;
+  display: flex; align-items:center; justify-content:space-between;
+  background: rgba(255,255,255,.93);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow .3s;
+}
+nav.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,.07); }
+
+.nav-logo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.55rem; font-weight: 900;
+  letter-spacing: 3px; color: var(--orange);
+  display: flex; align-items:center; gap:8px;
+}
+.nav-logo .icon {
+  width:34px; height:34px; background:var(--orange);
+  border-radius:8px; display:flex; align-items:center;
+  justify-content:center; color:#fff; font-size:.9rem; font-weight:900;
+}
+
+nav ul { display:flex; gap:28px; list-style:none; }
+nav ul a {
+  font-family: var(--font-body);
+  font-size:.87rem; font-weight:600; color:#444;
+  text-decoration:none; transition:color .2s;
+}
+nav ul a:hover { color:var(--orange); }
+
+.nav-right { display:flex; align-items:center; gap:14px; }
+
+/* ── Language Toggle ── */
+.lang-toggle {
+  display: flex; align-items:center;
+  background: var(--off); border:1.5px solid var(--border);
+  border-radius: 50px; padding: 3px;
+  gap: 2px; cursor:pointer;
+}
+.lang-btn {
+  padding: 5px 14px; border-radius: 50px;
+  font-size: .78rem; font-weight: 700;
+  border: none; background: transparent;
+  color: var(--gray); cursor:pointer;
+  transition: background .25s, color .25s;
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: .5px;
+}
+.lang-btn.active {
+  background: var(--orange);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(255,90,60,.35);
+}
+
+.nav-cta {
+  background: var(--orange); color:#fff;
+  padding: 10px 24px; border-radius:50px;
+  font-family: var(--font-body);
+  font-weight:700; font-size:.87rem; text-decoration:none;
+  box-shadow: 0 4px 18px rgba(255,90,60,.3);
+  transition: transform .2s, box-shadow .2s;
+  white-space: nowrap;
+}
+.nav-cta:hover { transform:translateY(-2px); box-shadow:0 8px 26px rgba(255,90,60,.42); }
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+.hero {
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  text-align:center; position:relative; overflow:hidden;
+  padding: 120px 48px 80px;
+  background: var(--white);
+}
+
+.hero-grid-bg {
+  position:absolute; inset:0; z-index:0;
+  background-image:
+    linear-gradient(rgba(255,90,60,.055) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(255,90,60,.055) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
+}
+
+.orb { position:absolute; border-radius:50%; filter:blur(80px); z-index:0; animation:drift 10s ease-in-out infinite; }
+.orb1 { width:500px;height:500px;background:rgba(255,90,60,.11);top:-150px;right:-100px;animation-delay:0s; }
+.orb2 { width:400px;height:400px;background:rgba(255,90,60,.07);bottom:-100px;left:-80px;animation-delay:-5s; }
+@keyframes drift { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(30px,-20px) scale(1.05)} 66%{transform:translate(-20px,15px) scale(.97)} }
+
+.hero-inner { position:relative; z-index:2; max-width:860px; }
+
+.hero-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--orange-light); border:1px solid rgba(255,90,60,.22);
+  color:var(--orange); padding:8px 20px; border-radius:50px;
+  font-family:var(--font-body); font-size:.8rem; font-weight:600; letter-spacing:.3px;
+  margin-bottom:28px; animation:fadeDown .7s ease both;
+}
+.badge-dot { width:7px;height:7px;background:var(--orange);border-radius:50%;animation:blink 1.5s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+.hero-title {
+  font-family: var(--font-head);
+  font-size: clamp(3.2rem,8vw,6.8rem);
+  font-weight: 900; line-height: .95;
+  animation: fadeUp .8s .1s ease both;
+}
+[lang="en"] .hero-title { letter-spacing:-2px; }
+
+.hero-title .line-accent { color:var(--orange); display:block; }
+.hero-title .line-main   { display:block; }
+
+.hero-sub {
+  font-family: var(--font-body);
+  font-size:1.05rem; color:var(--gray); line-height:1.8;
+  margin:24px auto 40px; max-width:520px;
+  animation:fadeUp .8s .2s ease both;
+}
+
+.hero-btns {
+  display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+  animation:fadeUp .8s .3s ease both;
+}
+.btn-main {
+  background:var(--orange); color:#fff;
+  padding:16px 38px; border-radius:50px;
+  font-family:var(--font-body); font-weight:700; font-size:1rem;
+  text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+  box-shadow:0 8px 28px rgba(255,90,60,.34);
+  transition:transform .2s, box-shadow .2s;
+}
+.btn-main:hover { transform:translateY(-3px); box-shadow:0 14px 38px rgba(255,90,60,.5); }
+.btn-outline {
+  background:transparent; color:var(--dark);
+  padding:16px 38px; border-radius:50px;
+  font-family:var(--font-body); font-weight:700; font-size:1rem;
+  text-decoration:none; border:2px solid var(--border);
+  display:inline-flex; align-items:center; gap:8px;
+  transition:border-color .2s, color .2s;
+}
+.btn-outline:hover { border-color:var(--orange); color:var(--orange); }
+
+.hero-scroll {
+  position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  font-family:'Outfit',sans-serif; font-size:.68rem; color:var(--gray); letter-spacing:2px;
+  animation:fadeUp 1s .6s ease both;
+}
+.scroll-line {
+  width:1px; height:40px;
+  background:linear-gradient(to bottom,var(--orange),transparent);
+  animation:scrollAnim 1.8s ease-in-out infinite;
+}
+@keyframes scrollAnim { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+/* ══════════════════════════════════════
+   STATS STRIP
+══════════════════════════════════════ */
+.stats-strip { background:var(--dark); padding:60px 48px; }
+.stats-inner {
+  max-width:1100px; margin:0 auto;
+  display:grid; grid-template-columns:repeat(4,1fr);
+}
+.stat-box {
+  text-align:center; padding:32px 20px;
+  border-left:1px solid rgba(255,255,255,.08);
+  opacity:0; transform:translateY(24px);
+  transition:opacity .6s ease,transform .6s ease;
+}
+.stat-box:first-child { border-left:none; }
+[dir="rtl"] .stat-box { border-left:none; border-right:1px solid rgba(255,255,255,.08); }
+[dir="rtl"] .stat-box:first-child { border-right:none; }
+.stat-box.visible { opacity:1; transform:none; }
+.stat-num { font-family:'Outfit',sans-serif; font-size:3rem; font-weight:900; color:var(--orange); line-height:1; }
+.stat-label { font-family:var(--font-body); font-size:.83rem; color:rgba(255,255,255,.5); margin-top:8px; }
+
+/* ══════════════════════════════════════
+   WHY US
+══════════════════════════════════════ */
+.why-section {
+  padding:120px 0;
+  
+  }
+.why-head { text-align:center;
+  margin-bottom:100px;
+  padding: 120px 0;
+  position: relative;
+  background-image: url('assets/magnific_img1_2935525454.png');
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+.section-head {
+  font-family: var(--font-head);
+  font-size: clamp(2.2rem,4.5vw,3.4rem);
+  font-weight: 900; line-height: 1.08;
+  
+}
+[lang="en"] .section-head { letter-spacing:-1px; }
+
+.features-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.feat-card {
+  background:var(--off); border:1px solid var(--border);
+  border-radius:20px; padding:36px 30px;
+  opacity:0; transform:translateY(30px);
+  transition:opacity .6s ease,transform .6s ease,box-shadow .3s,border-color .3s;
+}
+.feat-card.visible { opacity:1; transform:none; }
+.feat-card:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(255,90,60,.1); border-color:rgba(255,90,60,.3); }
+.feat-icon {
+  width:48px; height:48px; background:var(--orange-light); border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; margin-bottom:20px; color:var(--orange);
+  transition:background .3s,transform .3s;
+}
+.feat-card:hover .feat-icon { background:var(--orange); color:#fff; transform:scale(1.1); }
+.feat-title { font-family:var(--font-head); font-weight:800; font-size:1.05rem; margin-bottom:10px; }
+.feat-desc { font-family:var(--font-body); font-size:.88rem; color:var(--gray); line-height:1.8; }
+
+/* ══════════════════════════════════════
+   APPROACH (dark)
+══════════════════════════════════════ */
+.approach-section { position:relative; overflow:hidden; min-height:540px; display:flex; align-items:center; }
+.approach-bg {
+  position:absolute; inset:0;
+  background:linear-gradient(135deg,#0f0f0f,#1c1c1c);
+}
+.approach-bg::after {
+  content:''; position:absolute; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ff5a3c' fill-opacity='0.04'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+}
+.approach-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 100px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr; /* كبّر عمود الهاتف */
+  gap: 40px;
+  align-items: center;
+}
+.approach-title {
+  font-family:var(--font-head); font-size:clamp(2rem,4vw,3rem);
+  font-weight:900; color:#fff; line-height:1.1;
+}
+.approach-sub { font-family:var(--font-body); color:rgba(255,255,255,.58); font-size:.95rem; line-height:1.85; margin:16px 0 32px; }
+.check-list { list-style:none; display:flex; flex-direction:column; gap:14px; }
+.check-list li { display:flex; align-items:flex-start; gap:12px; font-family:var(--font-body); color:rgba(255,255,255,.8); font-size:.9rem; }
+.check-list li .ck { width:22px;height:22px;min-width:22px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#fff;margin-top:2px; }
+
+.approach-visual { display:flex; justify-content:center; }
+.phone-3d {
+  width:240px; height:480px; background:#111;
+  border-radius:36px; border:2px solid rgba(255,90,60,.4); overflow:hidden;
+  box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.05),0 0 60px rgba(255,90,60,.12);
+  transform:perspective(800px) rotateY(-8deg) rotateX(3deg);
+  transition:transform .4s ease;
+  animation:floatPhone 5s ease-in-out infinite;
+  
+}
+
+img.phone-3d {
+ width: 750px; /* أكبر من 280 */
+  height: auto;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+  object-fit: contain;
+}
+
+@media (max-width: 1024px) {
+  .approach-inner {
+    grid-template-columns: 1fr;
+    padding: 60px 24px;
+    gap: 40px;
+  }
+  .approach-visual {
+    order: -1; /* الهاتف فوق النص على الموبايل */
+  }
+  img.phone-3d {
+    width: 100px;
+  }
+}
+
+@media (max-width: 600px) {
+  img.phone-3d {
+    width: 120px;
+  }
+  .approach-inner {
+    padding: 40px 16px;
+  }
+}
+
+
+.phone-3d:hover { transform:perspective(800px) rotateY(0) rotateX(0) scale(1.02); }
+@keyframes floatPhone { 0%,100%{transform:perspective(800px) rotateY(-8deg) rotateX(3deg) translateY(0)} 50%{transform:perspective(800px) rotateY(-8deg) rotateX(3deg) translateY(-14px)} }
+.phone-3d-inner { width:100%;height:100%;display:flex;flex-direction:column; }
+.p3-status { padding:14px 18px 6px;display:flex;justify-content:space-between;font-size:.55rem;color:rgba(255,255,255,.35); }
+.p3-screen { flex:1; padding:0 14px; }
+.p3-prize-img { width:100%;height:130px;background:linear-gradient(135deg,#1a1a1a,#2a2a2a);border-radius:16px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative;overflow:hidden; }
+.p3-prize-img::after { content:'Watch and Win'; position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:.5rem;color:rgba(255,255,255,.55);font-weight:700;letter-spacing:1px; }
+.p3-title { font-size:.68rem;font-weight:900;color:#fff;margin-bottom:4px;font-family:'Outfit',sans-serif; }
+.p3-sub { font-size:.5rem;color:rgba(255,255,255,.38);margin-bottom:16px; }
+.p3-play { width:56px;height:56px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;box-shadow:0 0 0 8px rgba(255,90,60,.15);animation:pulsePlay 2s infinite; }
+@keyframes pulsePlay { 0%,100%{box-shadow:0 0 0 8px rgba(255,90,60,.15)} 50%{box-shadow:0 0 0 16px rgba(255,90,60,.05)} }
+.p3-skip { text-align:center;font-size:.48rem;color:rgba(255,255,255,.28);text-decoration:underline; }
+
+/* ══════════════════════════════════════
+   HOW IT WORKS
+══════════════════════════════════════ */
+.how-section { padding:120px 0; }
+.how-inner { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.how-steps { margin-top:48px; display:flex; flex-direction:column; }
+.step {
+  display:flex; gap:20px; padding:28px 0;
+  border-bottom:1px solid var(--border); cursor:pointer;
+  opacity:0; transform:translateX(30px);
+  transition:opacity .5s ease,transform .5s ease;
+}
+[dir="rtl"] .step { transform:translateX(-30px); }
+.step.visible { opacity:1; transform:none; }
+.step:last-child { border-bottom:none; }
+.step-num { font-family:'Outfit',sans-serif; font-size:2.2rem; font-weight:900; color:var(--orange-mid); line-height:1; min-width:52px; transition:color .3s; }
+.step:hover .step-num { color:var(--orange); }
+.step-title { font-family:var(--font-head); font-weight:800; font-size:1.08rem; margin-bottom:6px; }
+.step-desc { font-family:var(--font-body); font-size:.88rem; color:var(--gray); line-height:1.8; }
+.how-right { display:flex; justify-content:center; }
+.how-phone {
+  width:260px; height:520px; background:#0f0f0f;
+  border-radius:40px; border:2px solid #1f1f1f; overflow:hidden;
+  box-shadow:0 40px 80px rgba(0,0,0,.16),0 0 0 8px rgba(0,0,0,.04);
+  position:relative; animation:floatPhone 5s ease-in-out infinite;
+}
+.how-screen { position:absolute; inset:0; transition:opacity .5s ease,transform .5s ease; }
+.how-screen.active { opacity:1; transform:translateY(0); pointer-events:auto; }
+.how-screen.inactive { opacity:0; transform:translateY(18px); pointer-events:none; }
+.hs-inner { width:100%;height:100%;display:flex;flex-direction:column;padding:18px 14px; }
+.hs-status { display:flex;justify-content:space-between;font-size:.55rem;color:rgba(255,255,255,.3);margin-bottom:12px; }
+.hs-logo { text-align:center;font-family:'Outfit',sans-serif;font-size:1.4rem;font-weight:900;color:var(--orange);letter-spacing:3px;margin-bottom:14px; }
+
+/* screen skins */
+.hs1 { background:linear-gradient(160deg,#0d0d0d,#1a0a05); }
+.hs1-cards { display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px; }
+.hs1-card { background:rgba(255,255,255,.04);border:1px solid rgba(255,90,60,.18);border-radius:12px;padding:9px; }
+.hs1-tag { font-size:.42rem;color:rgba(255,255,255,.32); }
+.hs1-name { font-size:.58rem;font-weight:800;color:#fff;margin:2px 0 6px; }
+.hs1-img { height:38px;background:linear-gradient(135deg,rgba(255,90,60,.45),rgba(255,90,60,.2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:5px; }
+.hs1-info { font-size:.42rem;color:rgba(255,255,255,.3); }
+.hs1-bar { height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:4px; }
+.hs1-fill { height:100%;background:var(--orange);border-radius:2px; }
+.hs1-watch { background:rgba(255,90,60,.08);border:1px solid rgba(255,90,60,.12);border-radius:12px;padding:10px;text-align:center; }
+.hs1-eyes { font-size:.9rem; }
+.hs1-wtext { font-size:.7rem;font-weight:900;color:#fff; }
+
+.hs2 { background:#000; }
+.hs2-bg { height:55%;background:rgba(50,50,50,.5);position:relative; }
+.hs2-bg::after { content:'🚙';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3rem; }
+.hs2-modal { margin:-24px 12px 0;background:#1c1c1c;border-radius:16px;padding:14px 12px;text-align:center;position:relative;z-index:2; }
+.hs2-title { font-size:.7rem;font-weight:900;color:#fff;margin-bottom:6px; }
+.hs2-note { background:rgba(255,255,255,.05);border-radius:8px;padding:5px 8px;font-size:.44rem;color:rgba(255,255,255,.42);margin-bottom:9px; }
+.hs2-btn { background:var(--orange);color:#fff;border-radius:16px;padding:7px 14px;font-size:.52rem;font-weight:700;display:inline-block; }
+
+.hs3 { background:#000; }
+.hs3-bg { height:50%;background:rgba(255,120,50,.1);position:relative; }
+.hs3-bg::after { content:'🏎️';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3rem; }
+.hs3-modal { margin:-24px 12px 0;background:#1c1c1c;border-radius:16px;padding:14px 12px;text-align:center;position:relative;z-index:2; }
+.hs3-check { width:34px;height:34px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:.9rem; }
+.hs3-title { font-size:.7rem;font-weight:900;color:#fff;margin-bottom:8px; }
+.hs3-card { background:rgba(255,255,255,.07);border-radius:10px;padding:8px;margin-bottom:8px;text-align:right; }
+.hs3-card-title { font-size:.5rem;font-weight:700;color:#fff; }
+.hs3-card-sub { font-size:.42rem;color:rgba(255,255,255,.35); }
+.hs3-serial { font-size:.42rem;color:var(--orange);font-family:monospace;margin-top:3px; }
+.hs3-cta { background:var(--orange);color:#fff;border-radius:16px;padding:7px 14px;font-size:.52rem;font-weight:700;display:block;text-align:center; }
+
+/* ══════════════════════════════════════
+   FULL-BLEED MEDIA
+══════════════════════════════════════ */
+.media-section { position:relative;overflow:hidden;min-height:420px;display:flex;align-items:center;justify-content:center; }
+.media-bg { position: absolute;
+  inset: 0;
+  background-image: url('assets/magnific_5-thank-you-for-watching-_2935731422.png');
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center; }
+.media-bg::after { content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55); }
+.media-inner { position:relative;z-index:2;text-align:center;padding:0 48px; }
+.media-title { font-family:var(--font-head); font-size:clamp(2.5rem,6vw,5rem); font-weight:900; color:#fff; }
+[lang="en"] .media-title { letter-spacing:-1px; }
+
+/* ══════════════════════════════════════
+   PRICING
+══════════════════════════════════════ */
+.pricing-section { padding:120px 0; background:var(--off); }
+.pricing-head { text-align:center; margin-bottom:70px; }
+.pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.price-card {
+  background:var(--white); border:1px solid var(--border);
+  border-radius:24px; padding:40px 32px; position:relative; overflow:hidden;
+  opacity:0; transform:translateY(30px);
+  transition:opacity .6s ease,transform .6s ease,box-shadow .3s,border-color .3s;
+}
+.price-card.visible { opacity:1; transform:none; }
+.price-card:hover { box-shadow:0 24px 60px rgba(0,0,0,.07); }
+.price-card.popular { border-color:var(--orange); box-shadow:0 20px 60px rgba(255,90,60,.14); }
+.pop-badge { position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--orange);color:#fff;padding:5px 18px;border-radius:0 0 12px 12px;font-family:'Outfit',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.5px;white-space:nowrap; }
+.price-name { font-family:var(--font-head); font-size:1.2rem; font-weight:800; margin-bottom:6px; margin-top:16px; }
+.price-desc { font-family:var(--font-body); font-size:.82rem; color:var(--gray); margin-bottom:28px; }
+.price-val { font-family:'Outfit',sans-serif; font-size:2.6rem; font-weight:900; color:var(--dark); line-height:1; margin-bottom:4px; }
+.price-val span { font-family:var(--font-body); font-size:.95rem; color:var(--gray); font-weight:400; }
+.price-divider { height:1px; background:var(--border); margin:24px 0; }
+.price-features { list-style:none; display:flex; flex-direction:column; gap:12px; margin-bottom:32px; }
+.price-features li { font-family:var(--font-body); display:flex; align-items:center; gap:10px; font-size:.88rem; color:#444; }
+.price-features li .tick { color:var(--orange); font-weight:900; }
+.btn-price { display:block; text-align:center; padding:14px; border-radius:50px; font-family:var(--font-body); font-weight:700; font-size:.95rem; text-decoration:none; transition:all .2s; }
+.btn-price.filled { background:var(--orange);color:#fff;box-shadow:0 6px 20px rgba(255,90,60,.3); }
+.btn-price.filled:hover { transform:translateY(-2px);box-shadow:0 10px 28px rgba(255,90,60,.44); }
+.btn-price.bordered { border:2px solid var(--border);color:var(--dark); }
+.btn-price.bordered:hover { border-color:var(--orange);color:var(--orange); }
+
+/* ══════════════════════════════════════
+   FAQ
+══════════════════════════════════════ */
+.faq-section { padding:120px 0; }
+.faq-head { text-align:center; margin-bottom:64px; }
+.faq-list { max-width:720px; margin:0 auto; }
+.faq-item { border-bottom:1px solid var(--border); overflow:hidden; }
+.faq-q {
+  width:100%; background:none; border:none; cursor:pointer;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:22px 0; text-align:right;
+  font-family:var(--font-body); font-size:.97rem; font-weight:600; color:var(--dark);
+  transition:color .2s;
+}
+[lang="en"] .faq-q { text-align:left; }
+.faq-q:hover { color:var(--orange); }
+.faq-arrow { width:32px;height:32px;min-width:32px;background:var(--gray-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--gray);transition:background .3s,color .3s,transform .3s; }
+.faq-item.open .faq-arrow { background:var(--orange);color:#fff;transform:rotate(45deg); }
+.faq-a { max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s ease;font-family:var(--font-body);font-size:.88rem;color:var(--gray);line-height:1.85; }
+.faq-item.open .faq-a { max-height:220px; padding-bottom:20px; }
+
+/* ══════════════════════════════════════
+   CTA / CONTACT
+══════════════════════════════════════ */
+.cta-section { padding:120px 0; background:var(--off); }
+.cta-grid { display:grid; grid-template-columns:1fr 1.2fr; gap:80px; align-items:center; }
+.cta-left .section-head { font-size:clamp(1.9rem,4vw,2.9rem); }
+.cta-contact { margin-top:32px; display:flex; flex-direction:column; gap:14px; }
+.cta-contact-item { display:flex; align-items:center; gap:12px; }
+.cta-contact-icon { width:40px;height:40px;background:var(--orange-light);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:1rem; }
+.cta-contact-label { font-family:var(--font-body); font-size:.75rem; color:var(--gray); }
+.cta-contact-val { font-family:var(--font-body); font-weight:700; font-size:.9rem; }
+.cta-form { background:var(--white);border:1px solid var(--border);border-radius:28px;padding:48px 40px;box-shadow:0 20px 60px rgba(0,0,0,.055); }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+.form-group { display:flex; flex-direction:column; gap:6px; }
+.form-group.full { grid-column:span 2; }
+.form-group label { font-family:var(--font-body); font-size:.8rem; font-weight:600; color:#444; }
+.form-group input,
+.form-group textarea {
+  background:var(--off); border:1.5px solid var(--border);
+  border-radius:12px; padding:13px 16px;
+  font-size:.9rem; font-family:var(--font-body); color:var(--dark);
+  outline:none; transition:border-color .2s,box-shadow .2s;
+}
+[lang="ar"] .form-group input,
+[lang="ar"] .form-group textarea { direction:rtl; }
+[lang="en"] .form-group input,
+[lang="en"] .form-group textarea { direction:ltr; }
+.form-group input:focus,
+.form-group textarea:focus { border-color:var(--orange); box-shadow:0 0 0 3px rgba(255,90,60,.1); }
+.form-group textarea { resize:none; height:110px; }
+.form-submit {
+  width:100%; padding:16px; background:var(--orange); color:#fff;
+  border:none; border-radius:50px; cursor:pointer;
+  font-family:var(--font-body); font-size:1rem; font-weight:700; margin-top:8px;
+  box-shadow:0 8px 24px rgba(255,90,60,.3); transition:transform .2s,box-shadow .2s;
+}
+.form-submit:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(255,90,60,.44); }
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer { background:var(--dark); padding:60px 48px 36px; }
+.footer-top {
+  display:flex; justify-content:space-between; align-items:flex-start;
+  margin-bottom:48px; padding-bottom:48px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  flex-wrap:wrap; gap:32px;
+}
+.footer-brand .logo { font-family:'Outfit',sans-serif; font-size:1.55rem; font-weight:900; color:var(--orange); letter-spacing:3px; }
+.footer-brand p { font-family:var(--font-body); font-size:.85rem; color:rgba(255,255,255,.38); margin-top:10px; max-width:260px; line-height:1.75; }
+.footer-links { display:flex; gap:48px; }
+.footer-col h4 { font-family:'Outfit',sans-serif; font-size:.75rem; font-weight:800; color:#fff; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:16px; }
+.footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.footer-col ul a { font-family:var(--font-body); font-size:.84rem; color:rgba(255,255,255,.4); text-decoration:none; transition:color .2s; }
+.footer-col ul a:hover { color:var(--orange); }
+.footer-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+.footer-copy { font-family:var(--font-body); font-size:.78rem; color:rgba(255,255,255,.22); }
+.footer-socials { display:flex; gap:12px; }
+.social-btn { width:36px;height:36px;background:rgba(255,255,255,.06);border-radius:8px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.45);font-size:.85rem;text-decoration:none;font-family:'Outfit',sans-serif;transition:background .2s,color .2s; }
+.social-btn:hover { background:var(--orange); color:#fff; }
+
+/* ══════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════ */
+@keyframes fadeUp   { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:none} }
+@keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:none} }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:1024px){
+  .container,.stats-strip,.footer{padding-left:24px;padding-right:24px}
+  nav{padding:0 24px}
+  .how-inner{grid-template-columns:1fr}
+  .how-right{display:none}
+  .approach-inner{grid-template-columns:1fr;gap:40px}
+  .approach-visual{display:none}
+  .cta-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr}
+  .features-grid{grid-template-columns:1fr 1fr}
+  .stats-inner{grid-template-columns:1fr 1fr}
+  .stat-box{border-left:none;border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}
+  nav ul{display:none}
+  .footer-links{flex-wrap:wrap;gap:28px}
+}
+@media(max-width:600px){
+  .features-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .form-group.full{grid-column:span 1}
+  .cta-form{padding:28px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="nav-logo">
+     <img src="assets/logo.png" width="70px" alt="">
+  </div>
+
+  <ul>
+    <li><a href="#why"><span class="ar-only">لماذا شوف</span><span class="en-only">Why Us</span></a></li>
+    <li><a href="#approach"><span class="ar-only">نهجنا</span><span class="en-only">Our Approach</span></a></li>
+    <li><a href="#how"><span class="ar-only">كيف يعمل</span><span class="en-only">How It Works</span></a></li>
+    <li><a href="#pricing"><span class="ar-only">الباقات</span><span class="en-only">Pricing</span></a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <!-- Language toggle -->
+    <div class="lang-toggle" id="langToggle" aria-label="Toggle language">
+      <button class="lang-btn active" id="btnAr" onclick="setLang('ar')">AR</button>
+      <button class="lang-btn"        id="btnEn" onclick="setLang('en')">EN</button>
+    </div>
+    <a href="#contact" class="nav-cta">
+      <span class="ar-only">ابدأ الآن ←</span>
+      <span class="en-only">Get Started →</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span class="ar-only">منصة الإعلان التفاعلي رقم 1 في السعودية</span>
+      <span class="en-only">Saudi Arabia's #1 Interactive Advertising Platform</span>
+    </div>
+
+<h1 class="hero-title h-display">
+  <span class="ar-only">
+    <span class="line-main">حوّل المشاهدات</span>
+    <span class="line-accent">إلى قيمة</span>
+  </span>
+  <span class="en-only">
+    <span class="line-main">Turn Views Into</span>
+    <span class="line-accent">Value</span>
+  </span>
+</h1>
+
+    <p class="hero-sub">
+      <span class="ar-only">كل مشاهدة مضمونة. اهتمام حقيقي بدافع الفوز بجوائز حصرية. وصّل رسالتك لجمهور يختار بنفسه أن يشاهد.</span>
+      <span class="en-only">Every single time. Guaranteed attention with prize-driven engagement. Reach an audience that actively chooses to watch.</span>
+    </p>
+
+    <div class="hero-btns">
+      <a href="#contact" class="btn-main">
+        <span class="ar-only">ابدأ حملتك الإعلانية ←</span>
+        <span class="en-only">Start Your Campaign →</span>
+      </a>
+      <a href="#how" class="btn-outline">
+        <span>▶</span>
+        <span class="ar-only">كيف يعمل</span>
+        <span class="en-only">Watch Demo</span>
+      </a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══ STATS ══ -->
+<section class="stats-strip">
+
+  <!-- <div class="container stats-text-h2">
+  </div> -->
+
+  <div class="stats-inner">
+    <div class="stat-box">
+      <div class="stat-num" id="s1">100%</div>
+      <div class="stat-label"><span class="ar-only">معدل إكمال المشاهدة</span><span class="en-only">View Through Rate (VTR)</span></div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="s2">10x</div>
+      <div class="stat-label"><span class="ar-only">تفاعل أعلى</span><span class="en-only">Higher Engagement</span></div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="s3">0%</div>
+      <div class="stat-label"><span class="ar-only">معدل التخطي</span><span class="en-only">Skip Rate</span></div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="s4">+50K</div>
+      <div class="stat-label"><span class="ar-only">مستخدم مسجل</span><span class="en-only">Registered Audience</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHY US ══ -->
+<section class="why-section" id="why">
+  <div class="container ">
+
+    <div class="why-head ">
+      <span style="color: white;" class="tag "><span class="ar-only">لماذا تختار شوف</span><span class="en-only">Why Choose Us</span></span>
+      <h2 class="section-head h-display">
+        <span class="ar-only">شوف واكسب. <span class="accent">يشتغل فعلاً.</span></span>
+        <span class="en-only">Watch &amp; Win. It Actually <span class="accent">Works.</span></span>
+      </h2>
+      <p class="sub" style="color: white; margin:14px auto 0">
+        <span class="ar-only">الإعلانات التقليدية تُتخطى. إعلاناتنا تُشاهَد. السبب بسيط: نعطي المشاهدين سبباً حقيقياً لأن ينتبهوا.</span>
+        <span class="en-only">Traditional ads get skipped. Ours get watched. The difference is simple: we give viewers a real reason to pay attention.</span>
+      </p>
+    </div>
+    
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon">👁</div>
+        <div class="feat-title"><span class="ar-only">100% معدل المشاهدة الكاملة</span><span class="en-only">100% View Through Rate</span></div>
+        <div class="feat-desc"><span class="ar-only">كل إعلان يُشاهَد حتى النهاية. المستخدمون محفّزون للتفاعل من البداية للنهاية.</span><span class="en-only">Every ad is watched to completion. Users are incentivised to engage with your message from start to finish.</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📺</div>
+        <div class="feat-title"><span class="ar-only">بيئة غير مزعجة</span><span class="en-only">Non Intrusive Environment</span></div>
+        <div class="feat-desc"><span class="ar-only">الإعلانات مدمجة بشكل طبيعي في تجربة المستخدم دون إقطاع أو إزعاج.</span><span class="en-only">Ads are seamlessly integrated into the user experience without disrupting their journey.</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎯</div>
+        <div class="feat-title"><span class="ar-only">جمهور متفاعل فعلاً</span><span class="en-only">Engaged Audience</span></div>
+        <div class="feat-desc"><span class="ar-only">مستخدمونا يبحثون بأنفسهم عن الإعلانات لأن هناك قيمة في انتظارهم.</span><span class="en-only">Our users actively seek out ads because they know there's value waiting at the end.</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎮</div>
+        <div class="feat-title"><span class="ar-only">تجربة تفاعلية ممتعة</span><span class="en-only">Gamified Delivery</span></div>
+        <div class="feat-desc"><span class="ar-only">نظام مكافآت يبقي المستخدمين يعودون باستمرار ويضمن تكرار التعرض لعلامتك.</span><span class="en-only">Interactive and rewarding ad experiences that keep users coming back for more.</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-title"><span class="ar-only">إطلاق سريع</span><span class="en-only">Quick to Launch</span></div>
+        <div class="feat-desc"><span class="ar-only">اجعل حملتك مباشرة في دقائق عبر منصتنا ذاتية الخدمة البسيطة والقوية.</span><span class="en-only">Get your campaign live in minutes with our streamlined self-serve platform.</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">💰</div>
+        <div class="feat-title"><span class="ar-only">ميزانية مُحسَّنة</span><span class="en-only">Budget Friendly</span></div>
+        <div class="feat-desc"><span class="ar-only">عائد استثمار حقيقي وقابل للقياس. ادفع فقط مقابل مشاهدات حقيقية مضمونة.</span><span class="en-only">Maximise your ROI with cost-effective campaigns that deliver real results.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ APPROACH ══ -->
+<section class="approach-section" id="approach">
+  <div class="approach-bg"></div>
+  <div class="approach-inner">
+    <div class="approach-text">
+      <span style="font-size: 20px ;" class="tag"><span class="ar-only">نهجنا</span><span class="en-only">Our Approach</span></span>
+      <h2 class="approach-title h-display">
+        <span class="ar-only">الانتباه هو <span class="accent">العملة الجديدة</span></span>
+        <span class="en-only">Attention Is the <span class="accent">New Currency</span></span>
+      </h2>
+      <p class="approach-sub">
+        <span class="ar-only">الإعلانات التقليدية تتصارع على الانتباه. نحن نكافئ عليه. نموذج شوف يحوّل المشاهدين من متصفحين سلبيين إلى مشاركين فاعلين يعطون إعلاناتك الاهتمام الذي تستحقه.</span>
+        <span class="en-only">Traditional advertising fights for attention. We reward it. Our Watch &amp; Win model transforms viewers from passive scrollers into engaged participants who give ads the attention they deserve.</span>
+      </p>
+      <ul class="check-list">
+        <li><span class="ck">✓</span><span class="ar-only">المستخدمون يختارون بأنفسهم مشاهدة إعلاناتك</span><span class="en-only">Users actively choose to watch your ads</span></li>
+        <li><span class="ck">✓</span><span class="ar-only">معدل إكمال 100% مضمون</span><span class="en-only">100% completion rate guaranteed</span></li>
+        <li><span class="ck">✓</span><span class="ar-only">بيئة آمنة وموثوقة للبراند</span><span class="en-only">Premium brand-safe environment</span></li>
+        <li><span class="ck">✓</span><span class="ar-only">استهداف دقيق وتقارير لحظية</span><span class="en-only">Precise targeting &amp; real-time analytics</span></li>
+      </ul>
+    </div>
+   
+<div class="approach-visual">
+  <img src="assets/فون.png" class="phone-3d" >
+</div>
+
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section class="how-section" id="how">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:16px">
+      <span class="tag"><span class="ar-only">كيف يعمل</span><span class="en-only">How It Works</span></span>
+    </div>
+    <div style="text-align:center;margin-bottom:64px">
+      <h2 class="section-head h-display">
+        <span class="ar-only">بسيط. <span class="accent">فعّال.</span> مضمون.</span>
+        <span class="en-only">Simple. <span class="accent">Effective.</span> Guaranteed.</span>
+      </h2>
+      <p class="sub" style="margin:14px auto 0">
+        <span class="ar-only">نموذج الفوز مقابل المشاهدة يخلق تبادلاً حقيقياً للقيمة يفيد الجميع.</span>
+        <span class="en-only">Our watch-and-win model creates a value exchange that benefits everyone.</span>
+      </p>
+    </div>
+    <div class="how-inner">
+      <div class="how-left">
+        <div class="how-steps" id="steps">
+          <div class="step" data-screen="0">
+            <div class="step-num">01</div>
+            <div class="step-body">
+              <div class="step-title"><span class="ar-only">المستخدم يكتشف إعلانك</span><span class="en-only">User Discovers Your Ad</span></div>
+              <div class="step-desc"><span class="ar-only">المستخدمون يتصفحون المنصة بحثاً عن فرص الفوز. إعلانك هو بوابتهم نحو الجائزة.</span><span class="en-only">Users actively browse our platform looking for prize opportunities. Your ad is the gateway to winning.</span></div>
+            </div>
+          </div>
+          <div class="step" data-screen="1">
+            <div class="step-num">02</div>
+            <div class="step-body">
+              <div class="step-title"><span class="ar-only">المشاهدة الكاملة والتفاعل</span><span class="en-only">Full Watch &amp; Engagement</span></div>
+              <div class="step-desc"><span class="ar-only">يشاهد المستخدمون إعلانك حتى النهاية. أي توقف يعيد البدء — مشاهدة مضمونة 100%.</span><span class="en-only">Users watch your ad to completion. Any pause resets the timer — 100% completion guaranteed.</span></div>
+            </div>
+          </div>
+          <div class="step" data-screen="2">
+            <div class="step-num">03</div>
+            <div class="step-body">
+              <div class="step-title"><span class="ar-only">المكافأة والنتائج</span><span class="en-only">Engagement &amp; Reward</span></div>
+              <div class="step-desc"><span class="ar-only">يحصل المستخدمون على تذاكر السحب، وأنت تحصل على تفاعل مضمون ومقاييس أداء حقيقية.</span><span class="en-only">Users get their prize ticket, you get guaranteed brand exposure and engagement metrics.</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="how-right">
+        <div class="how-phone" id="howPhone">
+          <div class="how-screen active" id="sc0">
+            <div class="hs-inner hs1">
+              <div class="hs-status"><span>11:14</span><span>📶🔋</span></div>
+              <div class="hs-logo">SHOOF</div>
+              <div class="hs1-cards">
+                <div class="hs1-card">
+                  <div class="hs1-tag"><span class="ar-only">شهري</span><span class="en-only">Monthly</span></div>
+                  <div class="hs1-name">Porsche 911</div>
+                  <div class="hs1-img">🏎️</div>
+                  <div class="hs1-info">4 / 150</div>
+                  <div class="hs1-bar"><div class="hs1-fill" style="width:3%"></div></div>
+                </div>
+                <div class="hs1-card">
+                  <div class="hs1-tag"><span class="ar-only">سنوي</span><span class="en-only">Yearly</span></div>
+                  <div class="hs1-name">Grand Prize</div>
+                  <div class="hs1-img">🏠</div>
+                  <div class="hs1-info">67 / 1825</div>
+                  <div class="hs1-bar"><div class="hs1-fill" style="width:4%"></div></div>
+                </div>
+              </div>
+              <div class="hs1-watch">
+                <div class="hs1-eyes">👁️👁️</div>
+                <div class="hs1-wtext"><span class="ar-only">شوف واكسب</span><span class="en-only">Watch &amp; Win</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="how-screen inactive" id="sc1">
+            <div class="hs-inner hs2">
+              <div class="hs-status"><span>11:14</span><span>📶🔋</span></div>
+              <div class="hs2-bg"></div>
+              <div class="hs2-modal">
+                <div class="hs2-title">⏸ <span class="ar-only">متوقف مؤقتاً</span><span class="en-only">Paused</span></div>
+                <div class="hs2-note">⚠️ <span class="ar-only">المشاهدات الكاملة فقط تُحتسب كتذاكر</span><span class="en-only">Only complete views count as tickets</span></div>
+                <div class="hs2-btn"><span class="ar-only">متابعة المشاهدة</span><span class="en-only">Continue watching</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="how-screen inactive" id="sc2">
+            <div class="hs-inner hs3">
+              <div class="hs-status"><span>11:14</span><span>📶🔋</span></div>
+              <div class="hs3-bg"></div>
+              <div class="hs3-modal">
+                <div class="hs3-check">✓</div>
+                <div class="hs3-title"><span class="ar-only">تمت المشاهدة! 🎉</span><span class="en-only">Ad finished! 🎉</span></div>
+                <div class="hs3-card">
+                  <div class="hs3-card-title">Range Rover 2025 — <span class="ar-only">تذكرة سحب</span><span class="en-only">Prize Ticket</span></div>
+                  <div class="hs3-card-sub"><span class="ar-only">تم الإصدار</span><span class="en-only">Issued</span> • 30 Mar 2026</div>
+                  <div class="hs3-serial">SHF-20260330-08FD34F4</div>
+                </div>
+                <div class="hs3-cta"><span class="ar-only">زيارة المعلن ←</span><span class="en-only">Visit advertiser →</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FULL BLEED ══ -->
+<section class="media-section">
+  <div class="media-bg"></div>
+  <div class="media-inner">
+    <h2 class="media-title h-display">
+      <span class="ar-only">كل مشاهدة <span class="accent">تُحسَب</span></span>
+      <span class="en-only">Where Every View <span class="accent">Counts</span></span>
+    </h2>
+  </div>
+</section>
+
+<!-- ══ PRICING ══ -->
+<section class="pricing-section" id="pricing">
+  <div class="container">
+    <div class="pricing-head">
+      <span style="font-size: 20px;" class="tag"><span class="ar-only">الباقات</span><span class="en-only">Pricing</span></span>
+      <h2 class="section-head h-display">
+        <span class="ar-only">اسعار بسيطة <span class="accent">وشفافة</span></span>
+        <span class="en-only">Simple, Transparent <span class="accent">Pricing.</span></span>
+      </h2>
+      <p class="sub" style="margin:14px auto 0">
+        <span class="ar-only">اختر الباقة المناسبة. جميع الباقات تشمل ضمان الصفر تخطي.</span>
+        <span class="en-only">Choose the package that fits your campaign goals. All plans include our zero-skip guarantee.</span>
+      </p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Starter</div>
+        <div class="price-desc"><span class="ar-only">مثالي للحملات الصغيرة</span><span class="en-only">Perfect for small campaigns</span></div>
+        <div class="price-val"><span class="ar-only">تواصل </span><span class="en-only">Contact </span><span><span class="ar-only">معنا</span><span class="en-only">us</span></span></div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="tick">✓</span> <span class="ar-only">حتى 10,000 مشاهدة</span><span class="en-only">Up to 10,000 impressions</span></li>
+          <li><span class="tick">✓</span> <span class="ar-only">خيارات استهداف أساسية</span><span class="en-only">Basic targeting options</span></li>
+          <li><span class="tick">✓</span> <span class="ar-only">تقارير معيارية</span><span class="en-only">Standard analytics</span></li>
+          <li><span class="tick">✓</span> <span class="ar-only">دعم عبر البريد</span><span class="en-only">Email support</span></li>
+        </ul>
+        <a href="#contact" class="btn-price bordered"><span class="ar-only">ابدأ الآن</span><span class="en-only">Get Started</span></a>
+      </div>
+      <div class="price-card popular">
+        <div class="pop-badge"><span class="ar-only">الأكثر طلباً</span><span class="en-only">Most Popular</span></div>
+        <div class="price-name">Growth</div>
+        <div class="price-desc"><span class="ar-only">للبراندات النامية</span><span class="en-only">For growing brands</span></div>
+        <div class="price-val"><span class="ar-only">تواصل </span><span class="en-only">Contact </span><span><span class="ar-only">معنا</span><span class="en-only">us</span></span></div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="tick">✓</span> <span class="ar-only">حتى 50,000 مشاهدة</span><span class="en-only">Up to 50,000 impressions</span></li>
+          <li><span class="tick">✓</span> <span class="ar-only">استهداف متقدم</span><span class="en-only">Advanced targeting</span></li>
+          <li><span class="tick">✓</span> <span class="ar-only">تقارير لحظية</span><span class="en-only">Real-time analytics</span></li>
+          <li><span class="tick">✓</span> <span class="ar-only">دعم أولوية</span><span class="en-only">Priority support</span></li>
+          <li><span class="tick">✓</span> <span class="ar-only">إبداعيات مخصصة</span><span class="en-only">Custom creatives</span></li>
+        </ul>
+        <a href="#contact" class="btn-price filled"><span class="ar-only">ابدأ الآن</span><span class="en-only">Get Started</span></a>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Enterprise</div>
+        <div class="price-desc"><span class="ar-only">للحملات الكبرى</span><span class="en-only">For large-scale campaigns</span></div>
+        <div class="price-val"><span class="ar-only">تواصل </span><span class="en-only">Contact </span><span><span class="ar-only">معنا</span><span class="en-only">us</span></span></div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="tick">✓</span> <span class="ar-only">مشاهدات غير محدودة</span><span class="en-only">Unlimited impressions</span></li>
+          <li><span class="tick">✓</span> <span class="ar-only">استهداف premium</span><span class="en-only">Premium targeting</span></li>
+          <li><span class="tick">✓</span> <span class="ar-only">مدير حساب مخصص</span><span class="en-only">Dedicated account manager</span></li>
+          <li><span class="tick">✓</span> <span class="ar-only">تكاملات مخصصة</span><span class="en-only">Custom integrations</span></li>
+          <li><span class="tick">✓</span> <span class="ar-only">ضمان SLA</span><span class="en-only">SLA guarantee</span></li>
+        </ul>
+        <a href="#contact" class="btn-price bordered"><span class="ar-only">تواصل معنا</span><span class="en-only">Contact Us</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="faq-head">
+      <span class="tag">FAQ</span>
+      <h2 class="section-head h-display">
+        <span class="ar-only">أسئلة؟ <span class="accent">إجابات.</span></span>
+        <span class="en-only">Questions? <span class="accent">Answers.</span></span>
+      </h2>
+      <p class="sub" style="margin:14px auto 0">
+        <span class="ar-only">كل ما تحتاج معرفته عن الإعلان مع شوف.</span>
+        <span class="en-only">Everything you need to know about advertising with SHOOF.</span>
+      </p>
+    </div>
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-q">
+          <span class="ar-only">كيف يعمل نموذج شوف واكسب للمعلنين؟</span>
+          <span class="en-only">How does the watch-and-win model work for advertisers?</span>
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          <span class="ar-only">المعلنون يرفعون إعلاناتهم على المنصة. المستخدمون يختارون مشاهدة هذه الإعلانات كاملاً مقابل تذاكر للسحب على جوائز حقيقية. هذا يضمن مشاهدة 100% حقيقية ومتفاعلة.</span>
+          <span class="en-only">Advertisers upload their ads to the platform. Users choose to watch these ads in full in exchange for tickets to draw on real prizes. This guarantees 100% genuine, engaged viewership.</span>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
+          <span class="ar-only">ما معدلات الإكمال التي يمكن توقعها؟</span>
+          <span class="en-only">What kind of completion rates can I expect?</span>
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          <span class="ar-only">نضمن معدل إكمال 100%. إذا توقف المستخدم عن المشاهدة لا تُحتسب التذكرة ولا يُحتسب الإعلان.</span>
+          <span class="en-only">We guarantee 100% completion rate. If a user stops watching, neither the ticket nor the ad view is counted.</span>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
+          <span class="ar-only">ما أنواع صيغ الإعلانات المدعومة؟</span>
+          <span class="en-only">What ad formats do you support?</span>
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          <span class="ar-only">ندعم إعلانات الفيديو بمختلف المدد، إلى جانب إعلانات تفاعلية أخرى. فريقنا يساعدك في تحسين صيغة إعلانك.</span>
+          <span class="en-only">We primarily support video ads of various lengths, along with other interactive ad formats. Our team will help you optimise your ad format for best performance.</span>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
+          <span class="ar-only">كيف أتتبع أداء حملتي؟</span>
+          <span class="en-only">How do I track campaign performance?</span>
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          <span class="ar-only">لوحة تحكم شاملة تعطيك مشاهدة لحظية لعدد المشاهدات، معدلات الإكمال، التفاعل، والتحويلات.</span>
+          <span class="en-only">A comprehensive dashboard gives you real-time visibility into views, completion rates, engagement, and conversions.</span>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
+          <span class="ar-only">ما الميزانية الأدنى للبدء؟</span>
+          <span class="en-only">What's the minimum budget to get started?</span>
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          <span class="ar-only">تواصل معنا لمناقشة الباقة المناسبة لميزانيتك وأهداف حملتك. لدينا حلول مرنة لجميع أحجام الميزانيات.</span>
+          <span class="en-only">Contact us to discuss the right package for your budget and campaign goals. We have flexible solutions for all budget sizes.</span>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
+          <span class="ar-only">كم يستغرق إطلاق الحملة بعد التسجيل؟</span>
+          <span class="en-only">How quickly can I launch a campaign?</span>
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          <span class="ar-only">في معظم الحالات يمكن إطلاق الحملة خلال 24-48 ساعة من اكتمال التسجيل ورفع المواد وإتمام الدفع.</span>
+          <span class="en-only">In most cases campaigns can go live within 24-48 hours of completing registration, uploading creatives, and completing payment.</span>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q">
+          <span class="ar-only">هل يمكنني استهداف شرائح ديموغرافية معينة؟</span>
+          <span class="en-only">Can I target specific demographics?</span>
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">
+          <span class="ar-only">نعم، نوفر خيارات استهداف متقدمة تشمل العمر، الجنس، المنطقة الجغرافية، الاهتمامات، وغيرها.</span>
+          <span class="en-only">Yes, we provide advanced targeting options including age, gender, geographic region, interests, and more.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA / CONTACT ══ -->
+<section class="cta-section" id="contact">
+  <div class="container">
+    <div class="cta-grid">
+      <div class="cta-left">
+        <span class="tag"><span class="ar-only">ابدأ الآن</span><span class="en-only">Get Started</span></span>
+        <h2 class="section-head h-display">
+          <span class="ar-only">جاهز تحوّل <span class="accent">إعلاناتك؟</span></span>
+          <span class="en-only">Ready to Transform <span class="accent">Your Ads?</span></span>
+        </h2>
+        <p class="sub" style="margin-top:14px">
+          <span class="ar-only">انضم للبراندات التي اكتشفت قوة الانتباه المضمون. دعنا نناقش كيف يمكن لشوف أن يحقق نتائج حقيقية لعملك.</span>
+          <span class="en-only">Join the brands that have discovered the power of guaranteed attention. Let's discuss how SHOOF can drive real results for your business.</span>
+        </p>
+        <div class="cta-contact">
+          <div class="cta-contact-item">
+            <div class="cta-contact-icon">✉</div>
+            <div>
+              <div class="cta-contact-label"><span class="ar-only">راسلنا على</span><span class="en-only">Email us at</span></div>
+              <div class="cta-contact-val">hello@shoof-ad.com</div>
+            </div>
+          </div>
+          <div class="cta-contact-item">
+            <div class="cta-contact-icon">⏱</div>
+            <div>
+              <div class="cta-contact-label"><span class="ar-only">وقت الاستجابة</span><span class="en-only">Response time</span></div>
+              <div class="cta-contact-val"><span class="ar-only">خلال 24 ساعة</span><span class="en-only">Within 24 hours</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cta-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label><span class="ar-only">الاسم الكامل</span><span class="en-only">Your Name</span></label>
+            <input type="text" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label><span class="ar-only">البريد الإلكتروني</span><span class="en-only">Work Email</span></label>
+            <input type="email" placeholder="john@company.com">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full">
+            <label><span class="ar-only">اسم الشركة / البراند</span><span class="en-only">Company</span></label>
+            <input type="text" placeholder="Company Inc.">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full">
+            <label><span class="ar-only">أخبرنا عن أهدافك</span><span class="en-only">Tell us about your goals</span></label>
+            <textarea placeholder="What are you looking to achieve with your advertising?"></textarea>
+          </div>
+        </div>
+        <button class="form-submit">
+          <span class="ar-only">لنتحدث ←</span>
+          <span class="en-only">Let's Talk →</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo">SHOOF</div>
+      <p>
+        <span class="ar-only">منصة الإعلان التفاعلي — حيث كل مشاهدة تُحدث فرقاً حقيقياً.</span>
+        <span class="en-only">The interactive advertising platform — where every view makes a real difference.</span>
+      </p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4><span class="ar-only">المنصة</span><span class="en-only">Platform</span></h4>
+        <ul>
+          <li><a href="#why"><span class="ar-only">لماذا شوف</span><span class="en-only">Why Us</span></a></li>
+          <li><a href="#approach"><span class="ar-only">نهجنا</span><span class="en-only">Our Approach</span></a></li>
+          <li><a href="#how"><span class="ar-only">كيف يعمل</span><span class="en-only">How It Works</span></a></li>
+          <li><a href="#pricing"><span class="ar-only">الباقات</span><span class="en-only">Pricing</span></a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4><span class="ar-only">الشركة</span><span class="en-only">Company</span></h4>
+        <ul>
+          <li><a href="#"><span class="ar-only">من نحن</span><span class="en-only">About Us</span></a></li>
+          <li><a href="#"><span class="ar-only">المدونة</span><span class="en-only">Blog</span></a></li>
+          <li><a href="#"><span class="ar-only">وظائف</span><span class="en-only">Careers</span></a></li>
+          <li><a href="#contact"><span class="ar-only">تواصل معنا</span><span class="en-only">Contact</span></a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4><span class="ar-only">قانوني</span><span class="en-only">Legal</span></h4>
+        <ul>
+          <li><a href="#"><span class="ar-only">الشروط والأحكام</span><span class="en-only">Terms &amp; Conditions</span></a></li>
+          <li><a href="#"><span class="ar-only">سياسة الخصوصية</span><span class="en-only">Privacy Policy</span></a></li>
+          <li><a href="#"><span class="ar-only">سياسة الإعلانات</span><span class="en-only">Ad Policy</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 SHOOF. <span class="ar-only">جميع الحقوق محفوظة.</span><span class="en-only">All rights reserved.</span> — www.shoof-ad.com</div>
+    <div class="footer-socials">
+      <a href="#" class="social-btn">𝕏</a>
+      <a href="#" class="social-btn">in</a>
+      <a href="#" class="social-btn">ig</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+<script>
+/* ── Language switch ── */
+function setLang(lang) {
+  const root = document.getElementById('html-root');
+  root.setAttribute('lang', lang);
+  root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+  document.getElementById('btnAr').classList.toggle('active', lang === 'ar');
+  document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+  // update page title
+  document.title = lang === 'ar' ? 'SHOOF — شوف واكسب' : 'SHOOF — Watch & Win';
+}
+
+/* ── Scroll-based nav shadow ── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+/* ── Intersection observer — reveal ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.stat-box, .feat-card, .step, .price-card').forEach((el, i) => {
+  // stagger by category
+  if (el.classList.contains('feat-card'))  el.style.transitionDelay = (i % 6  * 0.09) + 's';
+  if (el.classList.contains('price-card')) el.style.transitionDelay = (i % 3  * 0.12) + 's';
+  if (el.classList.contains('stat-box'))   el.style.transitionDelay = (i % 4  * 0.09) + 's';
+  if (el.classList.contains('step'))       el.style.transitionDelay = (i % 3  * 0.12) + 's';
+  io.observe(el);
+});
+
+/* ── How-it-works: hover step → switch screen ── */
+document.querySelectorAll('.step').forEach((step, i) => {
+  step.addEventListener('mouseenter', () => {
+    document.querySelectorAll('.how-screen').forEach(s => {
+      s.classList.remove('active'); s.classList.add('inactive');
+    });
+    const sc = document.getElementById('sc' + i);
+    if (sc) { sc.classList.remove('inactive'); sc.classList.add('active'); }
+  });
+});
+
+/* ── FAQ accordion ── */
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+/* ── Stats counter animation ── */
+const counterData = [
+  { el: 's1', target: 100, suffix: '%' },
+  { el: 's2', target: 10,  suffix: 'x' },
+  { el: 's3', target: 0,   suffix: '%' },
+  { el: 's4', target: 50000, suffix: '', prefix: '+' },
+];
+
+function animateCounter(el, target, suffix, prefix = '') {
+  let start = null;
+  const duration = 1600;
+  const update = ts => {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    const val = Math.floor(ease * target);
+    el.textContent = prefix + (target >= 1000 ? val.toLocaleString() : val) + suffix;
+    if (p < 1) requestAnimationFrame(update);
+    else el.textContent = prefix + (target >= 1000 ? target.toLocaleString() : target) + suffix;
+  };
+  requestAnimationFrame(update);
+}
+
+const stripObs = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) {
+    counterData.forEach(d => {
+      const el = document.getElementById(d.el);
+      if (el) animateCounter(el, d.target, d.suffix, d.prefix || '');
+    });
+    stripObs.disconnect();
+  }
+}, { threshold: 0.3 });
+
+const strip = document.querySelector('.stats-strip');
+if (strip) stripObs.observe(strip);
+</script>
+</body>
+</html>

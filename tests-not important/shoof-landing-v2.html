@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHOOF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #FF5A3C;
+  --orange2: #ff7a5c;
+  --orange-light: #fff0ed;
+  --orange-mid: #ffe0d9;
+  --white: #ffffff;
+  --off: #fafafa;
+  --dark: #0f0f0f;
+  --gray: #6b7280;
+  --gray-light: #f3f4f6;
+  --border: #e5e7eb;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--white);
+  color: var(--dark);
+  overflow-x: hidden;
+}
+
+/* ── UTILITY ── */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+.tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 18px;
+}
+.section-head { font-family: 'Outfit', sans-serif; font-size: clamp(2.4rem,4.5vw,3.6rem); font-weight: 900; line-height: 1.08; letter-spacing:-1px; }
+.section-head .ar { font-family:'Cairo',sans-serif; font-weight:900; }
+.accent { color: var(--orange); }
+.sub { color: var(--gray); font-size:1rem; line-height:1.8; margin-top:14px; max-width:560px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; width:100%; z-index:999;
+  padding: 0 48px;
+  height: 68px;
+  display: flex; align-items:center; justify-content:space-between;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow .3s;
+}
+nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.06); }
+.nav-logo {
+  width: 100px;
+  height: 100px;
+  background-size: contain;
+  display:flex; align-items:center; gap:8px;
+}
+.nav-logo .icon {
+  width:34px; height:34px;
+  background: var(--orange);
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  color:white; font-size:1rem;
+}
+nav ul { display:flex; gap:32px; list-style:none; }
+nav ul a { font-size:.88rem; font-weight:600; color:#444; text-decoration:none; transition:color .2s; }
+nav ul a:hover { color: var(--orange); }
+.nav-btn {
+  background: var(--orange); color:#fff;
+  padding: 10px 26px; border-radius:50px;
+  font-weight:700; font-size:.88rem; text-decoration:none;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 4px 20px rgba(255,90,60,.3);
+}
+.nav-btn:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(255,90,60,.4); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display:flex; align-items:center; justify-content:center;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  padding: 120px 48px 80px;
+  background: var(--white);
+}
+
+/* animated grid bg */
+.hero-grid-bg {
+  position:absolute; inset:0; z-index:0;
+  background-image:
+    linear-gradient(rgba(255,90,60,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,90,60,.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  /* mask-image: radial-gradient(ellipse 80% 80% at 100% 100%, black 100%, transparent 100%); */
+  
+}
+
+/* floating orbs */
+.orb {
+  position:absolute; border-radius:50%;
+  filter: blur(80px);
+  animation: drift 10s ease-in-out infinite;
+  z-index:0;
+}
+.orb1 { width:500px; height:500px; background:rgba(255,90,60,.12); top:-150px; right:-100px; animation-delay:0s; }
+.orb2 { width:400px; height:400px; background:rgba(255,90,60,.08); bottom:-100px; left:-80px; animation-delay:-5s; }
+
+@keyframes drift {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(30px,-20px) scale(1.05); }
+  66% { transform: translate(-20px,15px) scale(.97); }
+}
+
+.hero-inner { position:relative; z-index:2; max-width:860px; }
+
+.hero-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  background: var(--orange-light);
+  border: 1px solid rgba(255,90,60,.25);
+  color: var(--orange);
+  padding: 8px 20px; border-radius:50px;
+  font-size:.8rem; font-weight:700; letter-spacing:.5px;
+  margin-bottom:28px;
+  animation: fadeDown .7s ease both;
+}
+.badge-dot { width:7px; height:7px; background:var(--orange); border-radius:50%; animation: blink 1.5s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+.hero-title {
+  font-family:'Outfit',sans-serif;
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight:900;
+  line-height:.95;
+  letter-spacing:-2px;
+  animation: fadeUp .8s .1s ease both;
+}
+.hero-title .line2 { color: var(--orange); display:block; }
+.hero-title .ar-big {
+  font-family:'Cairo',sans-serif;
+  font-size:clamp(2rem,4.5vw,4rem);
+  display:block;
+  letter-spacing:0;
+  color: var(--dark);
+}
+
+.hero-sub {
+  font-size:1.1rem; color:var(--gray); line-height:1.75;
+  margin: 24px auto 40px; max-width:520px;
+  animation: fadeUp .8s .2s ease both;
+}
+
+.hero-btns {
+  display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+  animation: fadeUp .8s .3s ease both;
+}
+.btn-main {
+  background:var(--orange); color:#fff;
+  padding:16px 38px; border-radius:50px;
+  font-weight:700; font-size:1rem; text-decoration:none;
+  display:inline-flex; align-items:center; gap:8px;
+  box-shadow: 0 8px 30px rgba(255,90,60,.35);
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-main:hover { transform:translateY(-3px); box-shadow:0 14px 40px rgba(255,90,60,.5); }
+.btn-outline {
+  background:transparent; color:var(--dark);
+  padding:16px 38px; border-radius:50px;
+  font-weight:700; font-size:1rem; text-decoration:none;
+  border:2px solid var(--border);
+  display:inline-flex; align-items:center; gap:8px;
+  transition: border-color .2s, color .2s;
+}
+.btn-outline:hover { border-color:var(--orange); color:var(--orange); }
+
+.hero-scroll {
+  position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  font-size:.72rem; color:var(--gray); letter-spacing:1.5px;
+  animation: fadeUp 1s .6s ease both;
+}
+.scroll-line {
+  width:1px; height:40px;
+  background: linear-gradient(to bottom, var(--orange), transparent);
+  animation: scrollDown 1.8s ease-in-out infinite;
+}
+@keyframes scrollDown { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+/* ── STATS ── */
+.stats-strip {
+  background: var(--dark);
+  padding: 60px 48px;
+}
+.stats-inner {
+  max-width:1100px; margin:0 auto;
+  display:grid; grid-template-columns: repeat(4,1fr);
+  gap:0;
+}
+.stat-box {
+  text-align:center; padding:32px 20px;
+  border-left:1px solid rgba(255,255,255,.08);
+  opacity:0; transform:translateY(24px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.stat-box:first-child { border-left:none; }
+.stat-box.visible { opacity:1; transform:none; }
+.stat-num {
+  font-family:'Outfit',sans-serif;
+  font-size:3rem; font-weight:900; color:var(--orange);
+  line-height:1;
+}
+.stat-label { font-size:.85rem; color:rgba(255,255,255,.55); margin-top:8px; }
+
+/* ── WHY US ── */
+.why-section { padding:120px 0; background:var(--white); }
+.why-head { text-align:center; margin-bottom:70px; }
+.why-head .sub { margin:14px auto 0; }
+
+.features-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+}
+.feat-card {
+  background:var(--off); border:1px solid var(--border);
+  border-radius:20px; padding:36px 30px;
+  transition: transform .3s, box-shadow .3s, border-color .3s;
+  opacity:0; transform:translateY(30px);
+  transition: opacity .6s ease, transform .6s ease, box-shadow .3s, border-color .3s;
+}
+.feat-card.visible { opacity:1; transform:none; }
+.feat-card:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(255,90,60,.1); border-color:rgba(255,90,60,.3); }
+.feat-icon {
+  width:48px; height:48px;
+  background:var(--orange-light); border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; margin-bottom:20px;
+  color:var(--orange);
+  transition: background .3s, transform .3s;
+}
+.feat-card:hover .feat-icon { background:var(--orange); color:#fff; transform:scale(1.1); }
+.feat-title { font-weight:800; font-size:1.05rem; margin-bottom:10px; font-family:'Outfit',sans-serif; }
+.feat-desc { font-size:.88rem; color:var(--gray); line-height:1.75; }
+
+/* ── APPROACH (full-bleed image + text) ── */
+.approach-section {
+  position:relative; overflow:hidden;
+  min-height:540px;
+  display:flex; align-items:center;
+}
+.approach-bg {
+  position:absolute; inset:0;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+}
+/* subtle texture */
+.approach-bg::after {
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ff5a3c' fill-opacity='0.04'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+}
+.approach-inner {
+  position:relative; z-index:2;
+  max-width:1200px; margin:0 auto; padding:100px 48px;
+  display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center;
+}
+.approach-text .tag { color:var(--orange2); }
+.approach-title { font-family:'Outfit',sans-serif; font-size:clamp(2.2rem,4vw,3.2rem); font-weight:900; color:#fff; line-height:1.1; letter-spacing:-1px; }
+.approach-title .ar { font-family:'Cairo',sans-serif; }
+.approach-sub { color:rgba(255,255,255,.6); font-size:.95rem; line-height:1.8; margin:16px 0 32px; }
+.check-list { list-style:none; display:flex; flex-direction:column; gap:14px; }
+.check-list li {
+  display:flex; align-items:flex-start; gap:12px;
+  color:rgba(255,255,255,.8); font-size:.9rem;
+}
+.check-list li .ck {
+  width:22px; height:22px; min-width:22px;
+  background:var(--orange); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.7rem; color:#fff; margin-top:2px;
+}
+.approach-visual {
+  display:flex; justify-content:center;
+}
+/* phone mockup for approach */
+.phone-3d {
+  width:240px; height:480px;
+  background:#111;
+  border-radius:36px;
+  border:2px solid rgba(255,90,60,.4);
+  overflow:hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.05), 0 0 60px rgba(255,90,60,.12);
+  transform: perspective(800px) rotateY(-8deg) rotateX(3deg);
+  transition: transform .4s ease;
+  animation: floatPhone 5s ease-in-out infinite;
+}
+.phone-3d:hover { transform:perspective(800px) rotateY(0) rotateX(0) scale(1.02); }
+@keyframes floatPhone { 0%,100%{transform:perspective(800px) rotateY(-8deg) rotateX(3deg) translateY(0)} 50%{transform:perspective(800px) rotateY(-8deg) rotateX(3deg) translateY(-14px)} }
+
+.phone-3d-inner { width:100%; height:100%; display:flex; flex-direction:column; }
+.p3-status { padding:14px 18px 6px; display:flex; justify-content:space-between; font-size:.55rem; color:rgba(255,255,255,.4); }
+.p3-screen { flex:1; padding:0 14px; }
+.p3-prize-img {
+  width:100%; height:130px;
+  background:linear-gradient(135deg,#1a1a1a,#2a2a2a);
+  border-radius:16px; margin-bottom:14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:3.5rem; position:relative; overflow:hidden;
+}
+.p3-prize-img::after { content:'Watch and Win'; position:absolute; bottom:8px; left:0; right:0; text-align:center; font-size:.5rem; color:rgba(255,255,255,.6); font-weight:700; letter-spacing:1px; }
+.p3-title { font-size:.7rem; font-weight:900; color:#fff; margin-bottom:4px; }
+.p3-sub { font-size:.5rem; color:rgba(255,255,255,.4); margin-bottom:16px; }
+.p3-play {
+  width:56px; height:56px;
+  background:var(--orange); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 14px; font-size:1.4rem;
+  box-shadow:0 0 0 8px rgba(255,90,60,.15);
+  animation: pulsePlay 2s infinite;
+}
+@keyframes pulsePlay { 0%,100%{box-shadow:0 0 0 8px rgba(255,90,60,.15)} 50%{box-shadow:0 0 0 16px rgba(255,90,60,.05)} }
+.p3-skip { text-align:center; font-size:.48rem; color:rgba(255,255,255,.3); text-decoration:underline; }
+
+/* ── HOW IT WORKS ── */
+.how-section { padding:120px 0; background:var(--white); }
+.how-inner { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.how-left { }
+.how-steps { margin-top:48px; display:flex; flex-direction:column; gap:0; }
+.step {
+  display:flex; gap:20px; padding:28px 0;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  opacity:0; transform:translateX(30px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+.step.visible { opacity:1; transform:none; }
+.step:last-child { border-bottom:none; }
+.step-num {
+  font-family:'Outfit',sans-serif;
+  font-size:2.2rem; font-weight:900;
+  color:var(--orange-mid);
+  line-height:1; min-width:52px;
+  transition: color .3s;
+}
+.step:hover .step-num { color:var(--orange); }
+.step-body { flex:1; }
+.step-title { font-family:'Outfit',sans-serif; font-weight:800; font-size:1.1rem; margin-bottom:6px; }
+.step-desc { font-size:.88rem; color:var(--gray); line-height:1.75; }
+
+.how-right { display:flex; justify-content:center; }
+.how-phone {
+  width:260px; height:520px;
+  background:#0f0f0f;
+  border-radius:40px;
+  border:2px solid #222;
+  overflow:hidden;
+  box-shadow:0 40px 80px rgba(0,0,0,.18), 0 0 0 8px rgba(0,0,0,.04);
+  position:relative;
+  animation: floatPhone 5s ease-in-out infinite;
+}
+/* screens inside phone */
+.how-screen { position:absolute; inset:0; transition:opacity .5s ease, transform .5s ease; }
+.how-screen.active { opacity:1; transform:translateY(0); }
+.how-screen.inactive { opacity:0; transform:translateY(20px); pointer-events:none; }
+
+.hs-inner { width:100%; height:100%; display:flex; flex-direction:column; padding:18px 14px; }
+.hs-status { display:flex; justify-content:space-between; font-size:.55rem; color:rgba(255,255,255,.35); margin-bottom:12px; }
+.hs-logo { text-align:center; font-family:'Outfit',sans-serif; font-size:1.4rem; font-weight:900; color:var(--orange); letter-spacing:3px; margin-bottom:14px; }
+
+/* screen 1 home */
+.hs1 { background:linear-gradient(160deg,#0d0d0d,#1a0a05); }
+.hs1-cards { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+.hs1-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,90,60,.18); border-radius:12px; padding:9px; }
+.hs1-tag { font-size:.42rem; color:rgba(255,255,255,.35); }
+.hs1-name { font-size:.58rem; font-weight:800; color:#fff; margin:2px 0 6px; }
+.hs1-img { height:38px; background:linear-gradient(135deg,rgba(255,90,60,.5),rgba(255,90,60,.2)); border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; margin-bottom:5px; }
+.hs1-info { font-size:.42rem; color:rgba(255,255,255,.35); }
+.hs1-bar { height:3px; background:rgba(255,255,255,.08); border-radius:2px; margin-top:4px; }
+.hs1-fill { height:100%; background:var(--orange); border-radius:2px; }
+.hs1-watch { background:rgba(255,90,60,.08); border:1px solid rgba(255,90,60,.12); border-radius:12px; padding:10px; text-align:center; }
+.hs1-eyes { font-size:.9rem; }
+.hs1-wtext { font-size:.7rem; font-weight:900; color:#fff; }
+
+/* screen 2 ad */
+.hs2 { background:#000; }
+.hs2-bg { height:55%; background:rgba(60,60,60,.5); position:relative; }
+.hs2-bg::after { content:'🚙'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:3rem; }
+.hs2-modal { margin:-24px 12px 0; background:#1c1c1c; border-radius:16px; padding:14px 12px; text-align:center; position:relative; z-index:2; }
+.hs2-title { font-size:.7rem; font-weight:900; color:#fff; margin-bottom:6px; }
+.hs2-note { background:rgba(255,255,255,.05); border-radius:8px; padding:5px 8px; font-size:.44rem; color:rgba(255,255,255,.45); margin-bottom:9px; }
+.hs2-btn { background:var(--orange); color:#fff; border-radius:16px; padding:7px 14px; font-size:.52rem; font-weight:700; }
+
+/* screen 3 done */
+.hs3 { background:#000; }
+.hs3-bg { height:50%; background:rgba(255,120,50,.1); position:relative; }
+.hs3-bg::after { content:'🏎️'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:3rem; }
+.hs3-modal { margin:-24px 12px 0; background:#1c1c1c; border-radius:16px; padding:14px 12px; text-align:center; position:relative; z-index:2; }
+.hs3-check { width:34px; height:34px; background:var(--orange); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; font-size:.9rem; }
+.hs3-title { font-size:.7rem; font-weight:900; color:#fff; margin-bottom:8px; }
+.hs3-card { background:rgba(255,255,255,.07); border-radius:10px; padding:8px; margin-bottom:8px; text-align:right; }
+.hs3-card-title { font-size:.5rem; font-weight:700; color:#fff; }
+.hs3-card-sub { font-size:.42rem; color:rgba(255,255,255,.4); }
+.hs3-serial { font-size:.42rem; color:var(--orange); font-family:monospace; margin-top:3px; }
+.hs3-cta { background:var(--orange); color:#fff; border-radius:16px; padding:7px 14px; font-size:.52rem; font-weight:700; display:block; text-align:center; }
+
+/* ── FULL BLEED VIDEO-FEEL ── */
+.media-section {
+  position:relative; overflow:hidden; min-height:460px;
+  display:flex; align-items:center; justify-content:center;
+}
+.media-bg {
+  position:absolute; inset:0;
+  background: linear-gradient(to bottom, rgba(0,0,0,.7), rgba(0,0,0,.5)),
+              linear-gradient(135deg, #1a0a05, #2a1005);
+}
+/* faux grain */
+.media-bg::after {
+  content:''; position:absolute; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  opacity:.4;
+}
+.media-inner { position:relative; z-index:2; text-align:center; padding:0 48px; }
+.media-title {
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(2.5rem,6vw,5rem);
+  font-weight:900; color:#fff; letter-spacing:-1px;
+}
+.media-title .ar { font-family:'Cairo',sans-serif; }
+.media-title .accent { color:var(--orange); }
+
+/* ── PRICING ── */
+.pricing-section { padding:120px 0; background:var(--off); }
+.pricing-head { text-align:center; margin-bottom:70px; }
+.pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.price-card {
+  background:var(--white); border:1px solid var(--border);
+  border-radius:24px; padding:40px 32px;
+  position:relative; overflow:hidden;
+  opacity:0; transform:translateY(30px);
+  transition: opacity .6s ease, transform .6s ease, box-shadow .3s, border-color .3s;
+}
+.price-card.visible { opacity:1; transform:none; }
+.price-card:hover { box-shadow:0 24px 60px rgba(0,0,0,.08); }
+.price-card.popular {
+  border-color:var(--orange);
+  background:var(--white);
+  box-shadow:0 20px 60px rgba(255,90,60,.15);
+}
+.pop-badge {
+  position:absolute; top:-1px; left:50%; transform:translateX(-50%);
+  background:var(--orange); color:#fff;
+  padding:5px 18px; border-radius:0 0 12px 12px;
+  font-size:.72rem; font-weight:700; letter-spacing:.5px;
+}
+.price-name { font-family:'Outfit',sans-serif; font-size:1.2rem; font-weight:800; margin-bottom:6px; margin-top:16px; }
+.price-desc { font-size:.82rem; color:var(--gray); margin-bottom:28px; }
+.price-val { font-family:'Outfit',sans-serif; font-size:2.8rem; font-weight:900; color:var(--dark); line-height:1; margin-bottom:4px; }
+.price-val span { font-size:1rem; color:var(--gray); font-weight:400; }
+.price-divider { height:1px; background:var(--border); margin:24px 0; }
+.price-features { list-style:none; display:flex; flex-direction:column; gap:12px; margin-bottom:32px; }
+.price-features li { display:flex; align-items:center; gap:10px; font-size:.88rem; color:#444; }
+.price-features li .tick { color:var(--orange); font-weight:900; }
+.btn-price {
+  display:block; text-align:center;
+  padding:14px; border-radius:50px;
+  font-weight:700; font-size:.95rem; text-decoration:none;
+  transition: all .2s;
+}
+.btn-price.filled { background:var(--orange); color:#fff; box-shadow:0 6px 20px rgba(255,90,60,.3); }
+.btn-price.filled:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(255,90,60,.45); }
+.btn-price.bordered { border:2px solid var(--border); color:var(--dark); }
+.btn-price.bordered:hover { border-color:var(--orange); color:var(--orange); }
+
+/* ── FAQ ── */
+.faq-section { padding:120px 0; background:var(--white); }
+.faq-head { text-align:center; margin-bottom:64px; }
+.faq-list { max-width:720px; margin:0 auto; display:flex; flex-direction:column; gap:0; }
+.faq-item {
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+}
+.faq-q {
+  width:100%; background:none; border:none; cursor:pointer;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:22px 0; text-align:right;
+  font-family:'Cairo',sans-serif; font-size:.98rem; font-weight:700; color:var(--dark);
+  transition: color .2s;
+}
+.faq-q:hover { color:var(--orange); }
+.faq-arrow {
+  width:32px; height:32px; min-width:32px;
+  background:var(--gray-light); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.7rem; color:var(--gray);
+  transition: background .3s, color .3s, transform .3s;
+}
+.faq-item.open .faq-arrow { background:var(--orange); color:#fff; transform:rotate(45deg); }
+.faq-a {
+  max-height:0; overflow:hidden;
+  transition: max-height .4s ease, padding .3s ease;
+  font-size:.88rem; color:var(--gray); line-height:1.8;
+  padding:0;
+}
+.faq-item.open .faq-a { max-height:200px; padding-bottom:20px; }
+
+/* ── CTA FORM ── */
+.cta-section { padding:120px 0; background:var(--off); }
+.cta-grid { display:grid; grid-template-columns:1fr 1.2fr; gap:80px; align-items:center; }
+.cta-left .tag { color:var(--orange); }
+.cta-left .section-head { font-family:'Outfit',sans-serif; font-size:clamp(2rem,4vw,3rem); font-weight:900; letter-spacing:-1px; }
+.cta-left .section-head .ar { font-family:'Cairo',sans-serif; }
+.cta-contact { margin-top:32px; display:flex; flex-direction:column; gap:14px; }
+.cta-contact-item { display:flex; align-items:center; gap:12px; }
+.cta-contact-icon { width:40px; height:40px; background:var(--orange-light); border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--orange); font-size:1rem; }
+.cta-contact-label { font-size:.75rem; color:var(--gray); }
+.cta-contact-val { font-weight:700; font-size:.9rem; }
+
+.cta-form {
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:28px; padding:48px 40px;
+  box-shadow:0 20px 60px rgba(0,0,0,.06);
+}
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+.form-group { display:flex; flex-direction:column; gap:6px; }
+.form-group.full { grid-column:span 2; }
+.form-group label { font-size:.8rem; font-weight:700; color:#444; }
+.form-group input,
+.form-group textarea {
+  background:var(--off); border:1.5px solid var(--border);
+  border-radius:12px; padding:13px 16px;
+  font-size:.9rem; font-family:'Cairo',sans-serif; color:var(--dark);
+  outline:none; transition:border-color .2s, box-shadow .2s;
+  direction:rtl;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px rgba(255,90,60,.1);
+}
+.form-group textarea { resize:none; height:110px; }
+.form-submit {
+  width:100%; padding:16px;
+  background:var(--orange); color:#fff;
+  border:none; border-radius:50px; cursor:pointer;
+  font-family:'Cairo',sans-serif; font-size:1rem; font-weight:700;
+  margin-top:8px;
+  box-shadow:0 8px 24px rgba(255,90,60,.3);
+  transition: transform .2s, box-shadow .2s;
+}
+.form-submit:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(255,90,60,.45); }
+
+/* ── FOOTER ── */
+footer {
+  background:var(--dark);
+  padding:60px 48px 36px;
+}
+.footer-top {
+  display:flex; justify-content:space-between; align-items:flex-start;
+  margin-bottom:48px; padding-bottom:48px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  flex-wrap:wrap; gap:32px;
+}
+.footer-brand .logo { font-family:'Outfit',sans-serif; font-size:1.6rem; font-weight:900; color:var(--orange); letter-spacing:3px; }
+.footer-brand p { font-size:.85rem; color:rgba(255,255,255,.4); margin-top:10px; max-width:260px; line-height:1.7; }
+.footer-links { display:flex; gap:48px; }
+.footer-col h4 { font-size:.78rem; font-weight:800; color:#fff; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:16px; }
+.footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.footer-col ul a { font-size:.85rem; color:rgba(255,255,255,.45); text-decoration:none; transition:color .2s; }
+.footer-col ul a:hover { color:var(--orange); }
+.footer-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+.footer-copy { font-size:.78rem; color:rgba(255,255,255,.25); }
+.footer-socials { display:flex; gap:12px; }
+.social-btn {
+  width:36px; height:36px;
+  background:rgba(255,255,255,.06); border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  color:rgba(255,255,255,.5); font-size:.85rem;
+  text-decoration:none; transition:background .2s, color .2s;
+}
+.social-btn:hover { background:var(--orange); color:#fff; }
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:none} }
+@keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:none} }
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .container{padding:0 24px}
+  nav{padding:0 24px}
+  .how-inner{grid-template-columns:1fr}
+  .how-right{display:none}
+  .approach-inner{grid-template-columns:1fr; gap:40px}
+  .approach-visual{display:none}
+  .cta-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr}
+  .features-grid{grid-template-columns:1fr 1fr}
+  .stats-inner{grid-template-columns:1fr 1fr}
+  .stat-box{border-left:none;border-bottom:1px solid rgba(255,255,255,.08)}
+  nav ul{display:none}
+  footer{padding:40px 24px 24px}
+  .footer-links{flex-wrap:wrap;gap:28px}
+}
+@media(max-width:600px){
+  .features-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .form-group.full{grid-column:span 1}
+  .cta-form{padding:28px 20px}
+  .section-head{font-size:2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="nav-logo">
+    <img src="assets/Screenshot 2026-04-29 100343.png" width="70px" alt="">
+  </div>
+  <ul>
+    <li><a href="#why">Why Shoof</a></li>
+    <li><a href="#approach">Our approach</a></li>
+    <li><a href="#how">How it work</a></li>
+    <li><a href="#pricing">Packages</a></li>
+    <li><a href="#faq">Questions</a></li>
+  </ul>
+  <a href="#contact" class="nav-btn">←Start now</a>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="home">
+  <div class="hero-grid-bg">
+    <img src="assets/ChatGPT Image Apr 25, 2026, 02_59_44 AM.png" alt="">
+  </div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+        #1 Interactive Advertising Platform in Saudi Arabia    
+    </div>
+    <h1 class="hero-title">
+      <span class="ar-big">Turn Views Into </span>
+      <span class="line2">Value</span>
+    </h1>
+    <p class="hero-sub">
+         Every view is guaranteed. Real attention driven by the motivation to win exclusive rewards. Deliver your message to an audience that chooses to watch.
+    </p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-main">Start Your Campaign ←</a>
+      <a href="#how" class="btn-outline">▶ How it works</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══ STATS STRIP ══ -->
+<section class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-box">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">معدل إكمال المشاهدة</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">10x</div>
+      <div class="stat-label">تفاعل أعلى من الإعلانات التقليدية</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">0%</div>
+      <div class="stat-label">معدل التخطي</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">+50K</div>
+      <div class="stat-label">مستخدم مسجل ومتفاعل</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHY US ══ -->
+<section class="why-section" id="why">
+  <div class="container">
+    <div class="why-head">
+      <span class="tag">لماذا تختار شوف</span>
+      <h2 class="section-head ar">شوف واكسب. <span class="accent">يشتغل فعلاً.</span></h2>
+      <p class="sub" style="margin:14px auto 0">الإعلانات التقليدية تُتخطى. إعلاناتنا تُشاهَد. السبب بسيط: نعطي المشاهدين سبباً حقيقياً لأن ينتبهوا.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon">👁</div>
+        <div class="feat-title">100% معدل المشاهدة الكاملة</div>
+        <div class="feat-desc">كل إعلان يُشاهَد حتى النهاية. المستخدمون محفّزون للتفاعل مع رسالتك من البداية للنهاية.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📺</div>
+        <div class="feat-title">بيئة غير مزعجة</div>
+        <div class="feat-desc">الإعلانات مدمجة بشكل طبيعي في تجربة المستخدم دون إقطاع أو إزعاج لرحلتهم.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎯</div>
+        <div class="feat-title">جمهور متفاعل فعلاً</div>
+        <div class="feat-desc">مستخدمونا يبحثون بأنفسهم عن الإعلانات لأنهم يعرفون أن هناك قيمة في انتظارهم.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🎮</div>
+        <div class="feat-title">تجربة تفاعلية ممتعة</div>
+        <div class="feat-desc">نظام مكافآت يبقي المستخدمين يعودون باستمرار، مما يضمن تكرار التعرض لعلامتك التجارية.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-title">إطلاق سريع</div>
+        <div class="feat-desc">اجعل حملتك مباشرة في دقائق عبر منصتنا ذاتية الخدمة البسيطة والقوية.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">💰</div>
+        <div class="feat-title">ميزانية مُحسَّنة</div>
+        <div class="feat-desc">عائد استثمار حقيقي وقابل للقياس. ادفع فقط مقابل مشاهدات حقيقية مضمونة.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ APPROACH (dark full-bleed) ══ -->
+<section class="approach-section" id="approach">
+  <div class="approach-bg"></div>
+  <div class="approach-inner">
+    <div class="approach-text">
+      <span class="tag">نهجنا</span>
+      <h2 class="approach-title">
+        <span class="ar">الانتباه هو</span>
+        <span class="accent">العملة الجديدة</span>
+      </h2>
+      <p class="approach-sub">
+        الإعلانات التقليدية تتصارع على الانتباه. نحن نكافئ عليه. نموذج شوف يحوّل المشاهدين من متصفحين سلبيين إلى مشاركين فاعلين يعطون إعلاناتك الاهتمام الذي تستحقه.
+      </p>
+      <ul class="check-list">
+        <li><span class="ck">✓</span> المستخدمون يختارون بأنفسهم مشاهدة إعلاناتك</li>
+        <li><span class="ck">✓</span> معدل إكمال 100% مضمون</li>
+        <li><span class="ck">✓</span> بيئة آمنة وموثوقة للبراند</li>
+        <li><span class="ck">✓</span> استهداف دقيق وتقارير لحظية</li>
+      </ul>
+    </div>
+    <div class="approach-visual">
+      <div class="phone-3d">
+        <div class="phone-3d-inner">
+          <div class="p3-status"><span>11:14</span><span>📶 🔋</span></div>
+          <div class="p3-screen">
+            <div class="p3-prize-img">🚙</div>
+            <div class="p3-title">شوف واكسب — Range Rover 2025</div>
+            <div class="p3-sub">اضغط مطولاً لتبدأ المشاهدة وتحصل على تذكرتك</div>
+            <div class="p3-play">▶</div>
+            <div class="p3-skip">لا شكراً، العودة للرئيسية</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section class="how-section" id="how">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:16px">
+      <span class="tag">كيف يعمل</span>
+    </div>
+    <div style="text-align:center;margin-bottom:64px">
+      <h2 class="section-head ar">بسيط. <span class="accent">فعّال.</span> مضمون.</h2>
+      <p class="sub" style="margin:14px auto 0">نموذج الفوز مقابل المشاهدة يخلق تبادلاً حقيقياً للقيمة يفيد الجميع.</p>
+    </div>
+    <div class="how-inner">
+      <div class="how-left">
+        <div class="how-steps" id="steps">
+          <div class="step" data-screen="0">
+            <div class="step-num">01</div>
+            <div class="step-body">
+              <div class="step-title">المستخدم يكتشف إعلانك</div>
+              <div class="step-desc">المستخدمون يتصفحون المنصة بحثاً عن فرص الفوز. إعلانك هو بوابتهم نحو الجائزة.</div>
+            </div>
+          </div>
+          <div class="step" data-screen="1">
+            <div class="step-num">02</div>
+            <div class="step-body">
+              <div class="step-title">المشاهدة الكاملة والتفاعل</div>
+              <div class="step-desc">يشاهد المستخدمون إعلانك حتى النهاية. أي توقف يعني إعادة البدء — مشاهدة مضمونة.</div>
+            </div>
+          </div>
+          <div class="step" data-screen="2">
+            <div class="step-num">03</div>
+            <div class="step-body">
+              <div class="step-title">المكافأة والتفاعل</div>
+              <div class="step-desc">يحصل المستخدمون على تذاكر السحب، وأنت تحصل على تفاعل مضمون ومقاييس أداء حقيقية.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="how-right">
+        <div class="how-phone" id="howPhone">
+          <!-- Screen 0 -->
+          <div class="how-screen active" id="sc0">
+            <div class="hs-inner hs1">
+              <div class="hs-status"><span>11:14</span><span>📶🔋</span></div>
+              <div class="hs-logo">SHOOF</div>
+              <div class="hs1-cards">
+                <div class="hs1-card">
+                  <div class="hs1-tag">شهري</div>
+                  <div class="hs1-name">Porsche 911</div>
+                  <div class="hs1-img">🏎️</div>
+                  <div class="hs1-info">4 / 150 مشاهدة</div>
+                  <div class="hs1-bar"><div class="hs1-fill" style="width:3%"></div></div>
+                </div>
+                <div class="hs1-card">
+                  <div class="hs1-tag">سنوي</div>
+                  <div class="hs1-name">Grand Prize</div>
+                  <div class="hs1-img">🏠</div>
+                  <div class="hs1-info">67 / 1825</div>
+                  <div class="hs1-bar"><div class="hs1-fill" style="width:4%"></div></div>
+                </div>
+              </div>
+              <div class="hs1-watch">
+                <div class="hs1-eyes">👁️👁️</div>
+                <div class="hs1-wtext">شوف واكسب</div>
+              </div>
+            </div>
+          </div>
+          <!-- Screen 1 -->
+          <div class="how-screen inactive" id="sc1">
+            <div class="hs-inner hs2">
+              <div class="hs-status"><span>11:14</span><span>📶🔋</span></div>
+              <div class="hs2-bg"></div>
+              <div class="hs2-modal">
+                <div class="hs2-title">⏸ متوقف مؤقتاً</div>
+                <div class="hs2-note">⚠️ المشاهدات الكاملة فقط تُحتسب كتذاكر</div>
+                <div class="hs2-btn">متابعة المشاهدة</div>
+              </div>
+            </div>
+          </div>
+          <!-- Screen 2 -->
+          <div class="how-screen inactive" id="sc2">
+            <div class="hs-inner hs3">
+              <div class="hs-status"><span>11:14</span><span>📶🔋</span></div>
+              <div class="hs3-bg"></div>
+              <div class="hs3-modal">
+                <div class="hs3-check">✓</div>
+                <div class="hs3-title">تمت المشاهدة! 🎉</div>
+                <div class="hs3-card">
+                  <div class="hs3-card-title">Range Rover 2025 — تذكرة سحب</div>
+                  <div class="hs3-card-sub">تم إصدارها • 30 مارس 2026</div>
+                  <div class="hs3-serial">SHF-20260330-08FD34F4</div>
+                </div>
+                <div class="hs3-cta">زيارة المعلن ←</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FULL BLEED MEDIA ══ -->
+<section class="media-section">
+  <div class="media-bg"></div>
+  <div class="media-inner">
+    <h2 class="media-title">
+      <span class="ar">كل مشاهدة</span>
+      <span class="accent">تُحسَب</span>
+    </h2>
+  </div>
+</section>
+
+<!-- ══ PRICING ══ -->
+<section class="pricing-section" id="pricing">
+  <div class="container">
+    <div class="pricing-head">
+      <span class="tag">الباقات</span>
+      <h2 class="section-head ar">تسعير شفاف. <span class="accent">بسيط.</span></h2>
+      <p class="sub" style="margin:14px auto 0">اختر الباقة التي تناسب أهداف حملتك. جميع الباقات تشمل ضمان الصفر تخطي.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Starter</div>
+        <div class="price-desc">مثالي للحملات الصغيرة</div>
+        <div class="price-val">تواصل <span>معنا</span></div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="tick">✓</span> حتى 10,000 مشاهدة</li>
+          <li><span class="tick">✓</span> خيارات استهداف أساسية</li>
+          <li><span class="tick">✓</span> تقارير معيارية</li>
+          <li><span class="tick">✓</span> دعم عبر البريد</li>
+        </ul>
+        <a href="#contact" class="btn-price bordered">ابدأ الآن</a>
+      </div>
+      <div class="price-card popular">
+        <div class="pop-badge">الأكثر طلباً</div>
+        <div class="price-name">Growth</div>
+        <div class="price-desc">للبراندات النامية</div>
+        <div class="price-val">تواصل <span>معنا</span></div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="tick">✓</span> حتى 50,000 مشاهدة</li>
+          <li><span class="tick">✓</span> استهداف متقدم</li>
+          <li><span class="tick">✓</span> تقارير لحظية</li>
+          <li><span class="tick">✓</span> دعم أولوية</li>
+          <li><span class="tick">✓</span> إبداعيات مخصصة</li>
+        </ul>
+        <a href="#contact" class="btn-price filled">ابدأ الآن</a>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Enterprise</div>
+        <div class="price-desc">للحملات الكبرى</div>
+        <div class="price-val">تواصل <span>معنا</span></div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li><span class="tick">✓</span> مشاهدات غير محدودة</li>
+          <li><span class="tick">✓</span> استهداف premium</li>
+          <li><span class="tick">✓</span> مدير حساب مخصص</li>
+          <li><span class="tick">✓</span> تكاملات مخصصة</li>
+          <li><span class="tick">✓</span> ضمان SLA</li>
+        </ul>
+        <a href="#contact" class="btn-price bordered">تواصل معنا</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="faq-head">
+      <span class="tag">الأسئلة الشائعة</span>
+      <h2 class="section-head ar">أسئلة؟ <span class="accent">إجابات.</span></h2>
+      <p class="sub" style="margin:14px auto 0">كل ما تحتاج معرفته عن الإعلان مع شوف.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">
+          كيف يعمل نموذج شوف واكسب للمعلنين؟
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">المعلنون يرفعون إعلاناتهم على المنصة. المستخدمون يختارون مشاهدة هذه الإعلانات كاملاً مقابل الحصول على تذاكر للسحب على جوائز حقيقية. هذا يضمن مشاهدة 100% حقيقية ومتفاعلة لكل إعلان.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          ما معدلات الإكمال التي يمكن توقعها؟
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">نضمن معدل إكمال 100%. إذا توقف المستخدم عن المشاهدة، لا تُحتسب التذكرة ولا يُحتسب الإعلان. هذا يحفز كل مستخدم على الإكمال الحقيقي.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          ما أنواع صيغ الإعلانات المدعومة؟
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">ندعم إعلانات الفيديو بالدرجة الأولى بمختلف المدد، إلى جانب إعلانات تفاعلية أخرى. فريقنا يساعدك في تحسين صيغة إعلانك للحصول على أفضل أداء.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          كيف أتتبع أداء حملتي؟
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">لوحة تحكم شاملة تعطيك مشاهدة لحظية لعدد المشاهدات، معدلات الإكمال، التفاعل، والتحويلات. التقارير متاحة يومياً وأسبوعياً وشهرياً.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          ما الميزانية الأدنى للبدء؟
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">تواصل معنا لمناقشة الباقة المناسبة لميزانيتك وأهداف حملتك. لدينا حلول مرنة لجميع أحجام الميزانيات.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          هل بيئة المنصة آمنة للبراند؟
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">نعم، شوف بيئة آمنة تماماً للبراند. نراجع جميع الإعلانات قبل النشر ونضمن أن إعلانك يظهر في سياق مناسب ومحترم.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          هل يمكنني استهداف شرائح ديموغرافية معينة؟
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">نعم، نوفر خيارات استهداف متقدمة تشمل العمر، الجنس، المنطقة الجغرافية، الاهتمامات، وغيرها. كلما كانت باقتك أعلى، كلما كانت خيارات الاستهداف أوسع.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">
+          كم يستغرق إطلاق الحملة بعد التسجيل؟
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">في معظم الحالات يمكن إطلاق الحملة خلال 24-48 ساعة من اكتمال التسجيل ورفع المواد الإبداعية وإتمام عملية الدفع.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA / CONTACT ══ -->
+<section class="cta-section" id="contact">
+  <div class="container">
+    <div class="cta-grid">
+      <div class="cta-left">
+        <span class="tag">ابدأ الآن</span>
+        <h2 class="section-head ar">جاهز تحوّل <span class="accent">إعلاناتك؟</span></h2>
+        <p class="sub" style="margin-top:14px">انضم للبراندات التي اكتشفت قوة الانتباه المضمون. دعنا نناقش كيف يمكن لشوف أن يحقق نتائج حقيقية لعملك.</p>
+        <div class="cta-contact">
+          <div class="cta-contact-item">
+            <div class="cta-contact-icon">✉</div>
+            <div>
+              <div class="cta-contact-label">راسلنا على</div>
+              <div class="cta-contact-val">hello@shoof-ad.com</div>
+            </div>
+          </div>
+          <div class="cta-contact-item">
+            <div class="cta-contact-icon">⏱</div>
+            <div>
+              <div class="cta-contact-label">وقت الاستجابة</div>
+              <div class="cta-contact-val">خلال 24 ساعة</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cta-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>الاسم الكامل</label>
+            <input type="text" placeholder="محمد الأحمد">
+          </div>
+          <div class="form-group">
+            <label>البريد الإلكتروني</label>
+            <input type="email" placeholder="name@company.com">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full">
+            <label>اسم الشركة / البراند</label>
+            <input type="text" placeholder="شركتك">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full">
+            <label>أخبرنا عن أهدافك</label>
+            <textarea placeholder="ما الذي تريد تحقيقه من حملتك الإعلانية؟"></textarea>
+          </div>
+        </div>
+        <button class="form-submit">لنتحدث ←</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo">SHOOF</div>
+      <p>منصة الإعلان التفاعلي — حيث كل مشاهدة تُحدث فرقاً حقيقياً.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>المنصة</h4>
+        <ul>
+          <li><a href="#why">لماذا شوف</a></li>
+          <li><a href="#approach">نهجنا</a></li>
+          <li><a href="#how">كيف يعمل</a></li>
+          <li><a href="#pricing">الباقات</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>الشركة</h4>
+        <ul>
+          <li><a href="#">من نحن</a></li>
+          <li><a href="#">المدونة</a></li>
+          <li><a href="#">وظائف</a></li>
+          <li><a href="#contact">تواصل معنا</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>قانوني</h4>
+        <ul>
+          <li><a href="#">الشروط والأحكام</a></li>
+          <li><a href="#">سياسة الخصوصية</a></li>
+          <li><a href="#">سياسة الإعلانات</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 SHOOF. جميع الحقوق محفوظة. — www.shoof-ad.com</div>
+    <div class="footer-socials">
+      <a href="#" class="social-btn">𝕏</a>
+      <a href="#" class="social-btn">in</a>
+      <a href="#" class="social-btn">ig</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Scroll reveal ──
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+    }
+  });
+},{threshold:0.12});
+
+document.querySelectorAll('.stat-box,.feat-card,.step,.price-card').forEach(el=>io.observe(el));
+
+// stagger feat cards
+document.querySelectorAll('.feat-card').forEach((el,i)=>{
+  el.style.transitionDelay = (i*0.1)+'s';
+});
+document.querySelectorAll('.price-card').forEach((el,i)=>{
+  el.style.transitionDelay = (i*0.12)+'s';
+});
+document.querySelectorAll('.stat-box').forEach((el,i)=>{
+  el.style.transitionDelay = (i*0.1)+'s';
+});
+document.querySelectorAll('.step').forEach((el,i)=>{
+  el.style.transitionDelay = (i*0.12)+'s';
+});
+
+// ── Nav scroll ──
+const nav = document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('scrolled', window.scrollY>20);
+});
+
+// ── How it works — step → screen ──
+const steps = document.querySelectorAll('.step');
+const screens = document.querySelectorAll('.how-screen');
+steps.forEach((step,i)=>{
+  step.addEventListener('mouseenter',()=>{
+    screens.forEach(s=>{ s.classList.remove('active'); s.classList.add('inactive'); });
+    const sc = document.getElementById('sc'+i);
+    if(sc){ sc.classList.remove('inactive'); sc.classList.add('active'); }
+    steps.forEach(s=>s.classList.remove('active-step'));
+    step.classList.add('active-step');
+  });
+});
+
+// ── FAQ accordion ──
+document.querySelectorAll('.faq-q').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!isOpen) item.classList.add('open');
+  });
+});
+
+// ── Counter animation for stats ──
+function animateCounter(el, target, suffix){
+  let start=0; const duration=1800;
+  const step = timestamp=>{
+    if(!start) start=timestamp;
+    const progress = Math.min((timestamp-start)/duration,1);
+    const ease = 1-Math.pow(1-progress,3);
+    const current = Math.floor(ease*target);
+    el.textContent = (target>=1000 ? '+'+current.toLocaleString() : current) + suffix;
+    if(progress<1) requestAnimationFrame(step);
+    else el.textContent = (target>=1000 ? '+'+target.toLocaleString() : target) + suffix;
+  };
+  requestAnimationFrame(step);
+}
+
+const statsObs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const nums = e.target.querySelectorAll('.stat-num');
+      const data = [{v:100,s:'%'},{v:10,s:'x'},{v:0,s:'%'},{v:50000,s:''}];
+      nums.forEach((el,i)=>{
+        if(data[i]) animateCounter(el, data[i].v, data[i].s);
+      });
+      statsObs.disconnect();
+    }
+  });
+},{threshold:0.3});
+const strip = document.querySelector('.stats-strip');
+if(strip) statsObs.observe(strip);
+</script>
+</body>
+</html>
